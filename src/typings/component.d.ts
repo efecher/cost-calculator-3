@@ -38,3 +38,11 @@ interface DisclaimerProps {
 interface SummaryProps {
   calculationData: CalculationData
 }
+
+interface PaginationProps {
+  currentPage: number,
+  numberOfPages: number,
+  pageClickHandler: function
+}
+
+interface PaginationState {}

@@ -13,6 +13,7 @@ import Summary from './pages/summary';
 import { Container, Row, Col } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { prop } from './util/util'; 
+import PageIndicator from './page-indicator';
 
 
 class App extends React.Component<AppProps, AppState> {
@@ -28,6 +29,7 @@ class App extends React.Component<AppProps, AppState> {
         POA: POAData
       },
       currentPage: 0,
+      furthestPage: 0,
       pages: PageData.pages,
       questionLogic: QuestionLogic.logic,
       userInput: {},
@@ -88,7 +90,8 @@ class App extends React.Component<AppProps, AppState> {
     
     let _cp: number = this.state.currentPage + 1;
     this.setState({
-      currentPage: _cp
+      currentPage: _cp,
+      furthestPage: this.state.furthestPage + 1
     });
 
     return;
@@ -162,6 +165,13 @@ class App extends React.Component<AppProps, AppState> {
     return;
   }
 
+  jumpBackToPageHandler = (pageNum: number) => {
+    this.setState({
+      currentPage: pageNum
+    });
+    return;
+  }
+
   render = () => {
     // NOTE: User must accept the disclaimer first
     if(!this.state.disclaimerAccepted) {
@@ -190,6 +200,7 @@ class App extends React.Component<AppProps, AppState> {
                 <h2 className="text-center">Net Cost Calculator</h2>
                 <Row>
                   <Col md={12}>
+                    <PageIndicator pageClickHandler={this.jumpBackToPageHandler} currentPage={this.state.currentPage} numberOfPages={this.state.pages.length} />
                     <Page 
                       pageQuestions={this.state.pages[this.state.currentPage]} 
                       submitPageHandler={this.pageSubmitHandler}

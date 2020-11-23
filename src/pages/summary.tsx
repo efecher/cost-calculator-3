@@ -43,7 +43,7 @@ export const Summary: React.FC<SummaryProps> = (props) => {
                 <td>
                   <strong>
                     {console.log(results.TAG + results.Pell + results.Merit + results.Needs)}
-                    {` ${results.TAG + results.Pell + results.Merit + results.Needs}`}
+                    {` $${results.TAG + results.Pell + results.Merit + results.Needs}`}
                   </strong>
                 </td>
               </tr>

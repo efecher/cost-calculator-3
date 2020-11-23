@@ -9,7 +9,6 @@ import Container from 'react-bootstrap/Container';
 import NumericQuestion from './question-types/numericquestion';
 import RadioQuestion from './question-types/radioquestion';
 
-
 export const Page: React.FC<Page.PageProps> = (props) => {
   //console.log(props.pageQuestions);
   
