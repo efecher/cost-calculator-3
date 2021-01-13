@@ -14,6 +14,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { prop } from './util/util'; 
 import PageIndicator from './page-indicator';
+import './App.css';
 
 
 class App extends React.Component<AppProps, AppState> {

@@ -52,8 +52,8 @@ export const Page: React.FC<Page.PageProps> = (props) => {
       </Container>
       <hr />
       <Row>
-        <Col md={{span: 2, offset: 4}}>
-          <Button variant="outline-success"
+        <Col md={{span: 4, offset: 3}}>
+          <Button variant="success"
             onClick={(e:React.MouseEvent<HTMLButtonElement>) => {props.submitPageHandler(e)}}
           >
             Continue »

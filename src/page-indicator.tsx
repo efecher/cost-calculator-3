@@ -3,9 +3,7 @@ import Pagination from 'react-bootstrap/Pagination';
 
 
 class PageIndicator extends React.Component<PaginationProps, PaginationState> {
-  constructor(props: PaginationProps) {
-    super(props);
-  }
+  
 
   generatePagination = (numPages: number) => {
     let returnJSX: JSX.Element[] = [];
