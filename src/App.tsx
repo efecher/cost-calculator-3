@@ -16,6 +16,8 @@ import { prop } from './util/util';
 import PageIndicator from './page-indicator';
 import './App.css';
 
+declare var __VERSION__: string;
+
 
 class App extends React.Component<AppProps, AppState> {
   constructor(props: AppProps) {
@@ -27,14 +29,16 @@ class App extends React.Component<AppProps, AppState> {
         Merit: MeritData,
         Pell: PellData, 
         TAG: TAGData,
-        POA: POAData
+        POA: POAData,
       },
       currentPage: 0,
       furthestPage: 0,
       pages: PageData.pages,
       questionLogic: QuestionLogic.logic,
       userInput: {},
-      disclaimerAccepted: false
+      disclaimerAccepted: false,
+      // NOTE: __VERSION__ is an environment variable in webpack that contains the timestamp of the most recent build. This will change with each start of the Dev server as the app is re-built each time the server is started, or should be constant in a production build
+      version: __VERSION__
     }  
   } 
 
