@@ -2,6 +2,8 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import { Col }  from 'react-bootstrap'; 
 
+// NOTE: Component that renders a question with radio buttons, a single-answer response from a list of choices
+
 export const RadioQuestion: React.FC<QuestionComponentProps>  = (props) => {
   let qd: PageQuestion = props.questionData;
   return (

@@ -1,5 +1,7 @@
 ///<reference path="../typings/component.d.ts" />
 
+// NOTE: Component for rendering a page of questions. The questions are rendered by nested components under ./question-types/, the data for the questions themselves comes from /src/questions/question-bank.json and any logic as far as "either/or", for instance both SAT scores OR ACT (but not both) or none at all comes from /src/questions/question-logic.json per-question. The data is loaded in state in the root APP component. 
+
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -38,6 +40,8 @@ export const Page: React.FC<Page.PageProps> = (props) => {
             key={`pageQuestion-${q}`}
           />);
           break;
+
+          // NOTE: in case other types of questions (checkbox, plain text, slider/range) add another case here
 
       default: pqInputs.push(<p key={`pageQuestion-${q}`}>Input Here</p>);
     }

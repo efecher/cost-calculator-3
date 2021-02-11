@@ -2,6 +2,8 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import { Row, Col }  from 'react-bootstrap'; 
 
+// NOTE: Component that renders a question with a Numeric answer. This will render as a text input with the only values allowed being numeric within the range defined by the min and max values, and the "step" parameter indicating how much each click of the up/don buttons rendered in most browsers will increment or decrement by. 
+
 export const NumericQuestion: React.FC<QuestionComponentProps>  = (props) => {
   let qd: PageQuestion = props.questionData;
   //console.log(props.currentValue);

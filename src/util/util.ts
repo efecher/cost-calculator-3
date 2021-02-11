@@ -16,7 +16,7 @@ export function prop<T, K extends keyof T>(obj: T, key: K):T[K] {
 *  corresponding to the EFC value for that income range's EFC value *  in the table
 */
 export function resolveIncomeRange(range: string): number {
-  console.log(range);
+  //console.log(range);
   let index: number = 0;
   
   switch(range) {

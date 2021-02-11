@@ -16,8 +16,7 @@ import { prop } from './util/util';
 import PageIndicator from './page-indicator';
 import './App.css';
 
-declare var __VERSION__: string;
-
+// NOTE: UI components are from react-bootstrap package https://react-bootstrap.github.io/
 
 class App extends React.Component<AppProps, AppState> {
   constructor(props: AppProps) {
@@ -25,20 +24,18 @@ class App extends React.Component<AppProps, AppState> {
 
     this.state = {
       calculationTables: {
-        EFC: EFCData,
-        Merit: MeritData,
-        Pell: PellData, 
-        TAG: TAGData,
-        POA: POAData,
+        EFC: EFCData, // NOTE: Expected Family Contribution matrix data
+        Merit: MeritData, // NOTE: Merit award matrix data
+        Pell: PellData, // NOTE: Pell Grant data
+        TAG: TAGData, // NOTE: Tuition Assistance Grant data
+        POA: POAData, // NOTE: Price of Admission data
       },
-      currentPage: 0,
-      furthestPage: 0,
-      pages: PageData.pages,
-      questionLogic: QuestionLogic.logic,
-      userInput: {},
-      disclaimerAccepted: false,
-      // NOTE: __VERSION__ is an environment variable in webpack that contains the timestamp of the most recent build. This will change with each start of the Dev server as the app is re-built each time the server is started, or should be constant in a production build
-      version: __VERSION__
+      currentPage: 0, // NOTE: Experimental, for the pagination
+      furthestPage: 0, // NOTE: Pagination
+      pages: PageData.pages, // NOTE: page data
+      questionLogic: QuestionLogic.logic, // NOTE: Question logic, "either/or", etc
+      userInput: {}, // NOTE: as user progresses thru app, will collect their responses
+      disclaimerAccepted: false, // NOTE: flag that allows rest of app to progress once user accepts the disclaimer
     }  
   } 
 
@@ -61,8 +58,8 @@ class App extends React.Component<AppProps, AppState> {
     for(let p of this.state.pages) {
       for(let q in p) {
         _ssidKeys = {
-          ..._ssidKeys,
-          [`${p[q].stateStorageID}`]: prop(p[q], "default")
+          ..._ssidKeys, // NOTE: we are creating a "new state" by including what was there and adding a new property, prevent mutation
+          [`${p[q].stateStorageID}`]: prop(p[q], "default")  // NOTE: using "array notation" to create a new property
         }
       }
     }
@@ -123,7 +120,7 @@ class App extends React.Component<AppProps, AppState> {
 
     // NOTE: if there is a value in the input
     if(parseInt(e.currentTarget.value) > 0) {
-      let _l: LogicOrPage = this.state.questionLogic[this.state.currentPage];
+      let _l: LogicOrPage = this.state.questionLogic[this.state.currentPage]; // NOTE: check if this question has logic behind it
       //console.log(_l);
       for(let _q of _l.logicORLeft) {
         if(_q === ssID) {
@@ -131,8 +128,7 @@ class App extends React.Component<AppProps, AppState> {
           * of the 'or' 
           */
           for(let r of _l.logicORRight) {
-            //console.log(r.substring(5,(ssID.length - 5)));
-            (document.querySelector<HTMLInputElement>(`#${r.substring(5)}`))!.disabled = true;
+            (document.querySelector<HTMLInputElement>(`#${r.substring(5)}`))!.disabled = true; // NOTE: the ! is not a typo, it's an assertion to the typescript compiler that the condition is true and there's always expected to be the item in question available in the DOM, to prevent a compilation error. If the item isn't there, there's something wrong anyway.
           }
         }
       }
@@ -199,6 +195,7 @@ class App extends React.Component<AppProps, AppState> {
         // NOTE: Important to ensure the state keys are there
         // for the controlled inputs
         if(Object.keys(this.state.userInput).length > 0) {
+          // NOTE: in JSX you can only output one 'root' element for all the content, so rather than use a <div>, use <> which is equivalent to <React.Fragment>
           return (
             <>
               <Container>
@@ -221,6 +218,7 @@ class App extends React.Component<AppProps, AppState> {
           return <p>Loading...</p>;
         } 
       } else {
+        // NOTE: we are done with the data collection, show the Summary component and run the report.
         return <Summary calculationData={this.packageSummaryData()} 
         resetHandler={this.resetHandler} />;
       } 

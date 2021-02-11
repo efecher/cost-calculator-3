@@ -14,8 +14,7 @@ interface AppState {
   },
   questionLogic: LogicOrPage[],
   disclaimerAccepted: boolean,
-  calculationTables: CalculationData.calculationTables,
-  version: string
+  calculationTables: CalculationData.calculationTables
 }
 
 interface LogicOrPage {
