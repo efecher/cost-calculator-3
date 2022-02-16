@@ -13,7 +13,6 @@ interface AppState {
     [key: string]: string
   },
   questionLogic: LogicOrPage[],
-  disclaimerAccepted: boolean,
   calculationTables: CalculationData.calculationTables
 }
 

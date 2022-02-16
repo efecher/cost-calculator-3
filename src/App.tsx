@@ -35,7 +35,7 @@ class App extends React.Component<AppProps, AppState> {
       pages: PageData.PageData, // NOTE: page data
       questionLogic: QuestionLogic.QuestionLogic, // NOTE: Question logic, "either/or", etc
       userInput: {}, // NOTE: as user progresses thru app, will collect their responses
-      disclaimerAccepted: false, // NOTE: flag that allows rest of app to progress once user accepts the disclaimer
+      //disclaimerAccepted: false, // NOTE: flag that allows rest of app to progress once user accepts the disclaimer
     }  
   } 
 
@@ -157,15 +157,6 @@ class App extends React.Component<AppProps, AppState> {
     return; 
   }
 
-  acceptHandler = (e:React.MouseEvent<HTMLButtonElement>) => {
-    if(!this.state.disclaimerAccepted) {
-      this.setState({
-        disclaimerAccepted: true
-      });
-    }
-    return;
-  }
-
   jumpBackToPageHandler = (pageNum: number) => {
     this.setState({
       currentPage: pageNum
@@ -174,55 +165,39 @@ class App extends React.Component<AppProps, AppState> {
   }
 
   render = () => {
-    // NOTE: User must accept the disclaimer first
-    if(!this.state.disclaimerAccepted) {
-      return (
-        <>
-        <h2 className="text-center">Net Cost Calculator</h2>
-        <Container>
-          <Row>
-            <Col md={{span:8, offset: 2}}>
-              <Disclaimer acceptHandler={this.acceptHandler} />
-              </Col>
-          </Row>
-        </Container>
-        </>
-      );
-    } else {
-      // NOTE: make sure we're not on the last page
-      if(this.state.currentPage < this.state.pages.length) {
-        //console.log(this.state.questionLogic);
-        // NOTE: Important to ensure the state keys are there
-        // for the controlled inputs
-        if(Object.keys(this.state.userInput).length > 0) {
-          // NOTE: in JSX you can only output one 'root' element for all the content, so rather than use a <div>, use <> which is equivalent to <React.Fragment>
-          return (
-            <>
-              <Container>
-                <h2 className="text-center">Net Cost Calculator</h2>
-                <Row>
-                  <Col md={12}>
-                    <PageIndicator pageClickHandler={this.jumpBackToPageHandler} currentPage={this.state.currentPage} numberOfPages={this.state.pages.length} />
-                    <Page 
-                      pageQuestions={this.state.pages[this.state.currentPage]} 
-                      submitPageHandler={this.pageSubmitHandler}
-                      stateInputValues={this.state.userInput} 
-                      inputChangeHandler={this.inputChangeHandler}  
-                    />
-                  </Col>
-                </Row>
-              </Container>
-            </>
-          );
-        } else {
-          return <p>Loading...</p>;
-        } 
+    // NOTE: make sure we're not on the last page
+    if(this.state.currentPage < this.state.pages.length) {
+      //console.log(this.state.questionLogic);
+      // NOTE: Important to ensure the state keys are there
+      // for the controlled inputs
+      if(Object.keys(this.state.userInput).length > 0) {
+        // NOTE: in JSX you can only output one 'root' element for all the content, so rather than use a <div>, use <> which is equivalent to <React.Fragment>
+        return (
+          <>
+            <Container>
+              <h2 className="text-center">Net Cost Calculator</h2>
+              <Row>
+                <Col md={12}>
+                  <PageIndicator pageClickHandler={this.jumpBackToPageHandler} currentPage={this.state.currentPage} numberOfPages={this.state.pages.length} />
+                  <Page 
+                    pageQuestions={this.state.pages[this.state.currentPage]} 
+                    submitPageHandler={this.pageSubmitHandler}
+                    stateInputValues={this.state.userInput} 
+                    inputChangeHandler={this.inputChangeHandler}  
+                  />
+                </Col>
+              </Row>
+            </Container>
+          </>
+        );
       } else {
-        // NOTE: we are done with the data collection, show the Summary component and run the report.
-        return <Summary calculationData={this.packageSummaryData()} 
-        resetHandler={this.resetHandler} />;
+        return <p>Loading...</p>;
       } 
-    }
+    } else {
+      // NOTE: we are done with the data collection, show the Summary component and run the report.
+      return <Summary calculationData={this.packageSummaryData()} 
+      resetHandler={this.resetHandler} />;
+    }  
   }
 } 
 
