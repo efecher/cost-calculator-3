@@ -6,8 +6,8 @@ import * as PellData from './data/pell.json';
 import * as TAGData from './data/tag.json';
 import * as POAData from './data/poa.json';
 import Disclaimer from './pages/disclaimer';
-import * as PageData from './questions/question-bank.json';
-import * as QuestionLogic from './questions/question-logic.json';
+import PageData from './questions/question-bank.json';
+import QuestionLogic from './questions/question-logic.json';
 import Page from './pages/page';
 import Summary from './pages/summary';
 import { Container, Row, Col } from 'react-bootstrap'
@@ -32,8 +32,8 @@ class App extends React.Component<AppProps, AppState> {
       },
       currentPage: 0, // NOTE: Experimental, for the pagination
       furthestPage: 0, // NOTE: Pagination
-      pages: PageData.pages, // NOTE: page data
-      questionLogic: QuestionLogic.logic, // NOTE: Question logic, "either/or", etc
+      pages: PageData.PageData, // NOTE: page data
+      questionLogic: QuestionLogic.QuestionLogic, // NOTE: Question logic, "either/or", etc
       userInput: {}, // NOTE: as user progresses thru app, will collect their responses
       disclaimerAccepted: false, // NOTE: flag that allows rest of app to progress once user accepts the disclaimer
     }  

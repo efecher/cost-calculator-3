@@ -1,7 +1,6 @@
 {
-  "pages": [
-    [
-      {
+  "PageData": [
+    [{
         "controlId": "student-age",
         "label": "Student Age",
         "controlType": "number",
@@ -38,8 +37,7 @@
         "stateStorageID": "form-current-residence"
       }
     ],
-    [
-      {
+    [{
         "controlId": "highschool-transfer",
         "label": "High School or Transfer",
         "controlType": "radio",
@@ -64,8 +62,7 @@
         "stateStorageID": "form-current-gpa"
       }
     ],
-    [
-      {
+    [{
         "controlId": "erw-sat",
         "label": "ERW SAT",
         "controlType": "number",
@@ -102,8 +99,7 @@
         "stateStorageID": "form-act"
       }
     ],
-    [
-      {
+    [{
         "controlId": "marital-status",
         "label": "Marital Status",
         "controlType": "radio",
@@ -128,8 +124,7 @@
         "stateStorageID": "form-children"
       }
     ],
-    [
-      {
+    [{
         "controlId": "people-in-household",
         "label": "Household Members",
         "controlType": "radio",
