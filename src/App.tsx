@@ -1,11 +1,5 @@
 ///<reference path="./typings/app.d.ts" />
 import React from 'react';
-import * as EFCData from './data/efc.json';
-import * as MeritData from './data/merit.json';
-import * as PellData from './data/pell.json';
-import * as TAGData from './data/tag.json';
-import * as POAData from './data/poa.json';
-import Disclaimer from './pages/disclaimer';
 import PageData from './questions/question-bank.json';
 import QuestionLogic from './questions/question-logic.json';
 import Page from './pages/page';
@@ -23,13 +17,6 @@ class App extends React.Component<AppProps, AppState> {
     super(props);
 
     this.state = {
-      calculationTables: {
-        EFC: EFCData, // NOTE: Expected Family Contribution matrix data
-        Merit: MeritData, // NOTE: Merit award matrix data
-        Pell: PellData, // NOTE: Pell Grant data
-        TAG: TAGData, // NOTE: Tuition Assistance Grant data
-        POA: POAData, // NOTE: Price of Admission data
-      },
       currentPage: 0, // NOTE: Experimental, for the pagination
       furthestPage: 0, // NOTE: Pagination
       pages: PageData.PageData, // NOTE: page data
@@ -38,20 +25,6 @@ class App extends React.Component<AppProps, AppState> {
       //disclaimerAccepted: false, // NOTE: flag that allows rest of app to progress once user accepts the disclaimer
     }  
   } 
-
-  /* NOTE: since there is a lot of data that needs to go to the 
-  *  Calculator part of the app, organize and package up the data
-  *  we need as one object to send to the Summary compnent as props
-  *  instead of a large number or individual props
-  */ 
-  packageSummaryData = () => {
-    let calculationData = {
-      calculationTables: this.state.calculationTables,
-      userInput: this.state.userInput
-    };
-
-    return calculationData;
-  }
 
   componentDidMount = () => {
     let _ssidKeys: LooseObject = {};
@@ -195,7 +168,7 @@ class App extends React.Component<AppProps, AppState> {
       } 
     } else {
       // NOTE: we are done with the data collection, show the Summary component and run the report.
-      return <Summary calculationData={this.packageSummaryData()} 
+      return <Summary calculationData={this.state.userInput} 
       resetHandler={this.resetHandler} />;
     }  
   }

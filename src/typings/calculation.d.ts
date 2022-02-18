@@ -32,26 +32,7 @@ interface POATable {
 }
 
 interface CalculationData {
-  calculationTables: {
-    EFC: {
-      default: any
-    }
-    Merit: {
-      default: MeritTables
-    },
-    Pell: {
-      default: number[][]
-    }
-    TAG: {
-      default: number[][]
-    },
-    POA: {
-      default: POATable
-    }
-  },
-  userInput: {
     [key: string]: string
-  }
 }
 
 interface Report {
