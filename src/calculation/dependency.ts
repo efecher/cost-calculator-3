@@ -1,7 +1,7 @@
 ///<reference path="../typings/calculation.d.ts" />
 
 // NOTE: Determines Dependency Status
-export function determineDependency(
+export default function determineDependency(
   age: number, 
   childSupport: boolean, 
   married: boolean)

@@ -10,6 +10,8 @@ export function prop<T, K extends keyof T>(obj: T, key: K):T[K] {
   return obj[key];
 }
 
+
+
 /* NOTE: resolveIncomeRange
 *  given the income range as a string from the value 
 *  of the radio button the user selected, resolve into a number
@@ -20,15 +22,15 @@ export function resolveIncomeRange(range: string): number {
   let index: number = 0;
   
   switch(range) {
-    case "$30,000 - $39,999": index = 1; break;
-    case "$40,000 - $49,999": index = 2; break;
-    case "$50,000 - $59,999": index = 3; break;
-    case "$60,000 - $69,999": index = 4; break;
-    case "$70,000 - $79,999": index = 5; break;
-    case "$80,000 - $89,999": index = 6; break;
-    case "$90,000 - $99,999": index = 7; break;
-    case "$100,000 or above": index = 8; break;
-    default: index = 0; break;
+    case "$30,000 - $39,999": index = 4; break;
+    case "$40,000 - $49,999": index = 5; break;
+    case "$50,000 - $59,999": index = 6; break;
+    case "$60,000 - $69,999": index = 7; break;
+    case "$70,000 - $79,999": index = 8; break;
+    case "$80,000 - $89,999": index = 9; break;
+    case "$90,000 - $99,999": index = 10; break;
+    case "$100,000 or above": index = 11; break;
+    default: index = 3; break;
    }  
 
    //console.log(index);
@@ -67,4 +69,31 @@ export function resolveNumberInCollege(value: string): number {
   }
 
   return returnValue;
+}
+
+// NOTE:  determine needs mode based on 
+//        - true = NJ Residnet, fasle = out of state
+//        - true = freshman, false = transfer student
+export function needsMode(residency: boolean, freshman: boolean): string {
+  if(residency) {
+    // NOTE: User is NJ Resident
+    if(freshman) {
+      // NOTE User is freshman
+      console.log("freshmanneedsbasednj");
+      return "freshmanneedsbasednj";
+    } else {
+      // NOTE: User is transfer
+      console.log("transferneedsbasednj");
+      return "transferneedsbasednj";
+    }
+  } else {
+    // NOTE: User is NOT NJ Resident
+    if(freshman) {
+      console.log("freshmannnedsbasednonnj");
+      return "freshmannnedsbasednonnj";
+    } else {
+      console.log("transferneedsbasednonnj");
+      return "transferneedsbasednonnj";
+    }
+  }
 }
