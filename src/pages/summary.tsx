@@ -16,10 +16,18 @@ export default function Summary(props: SummaryProps) {
   const [efcValue, setEFCValue] = useState<number>();
   const [needsTable, setNeedsTable] = useState<number[][]>();
   const [meritTable, setMeritTable] = useState<number[][]>();
+  const [tag, setTag] = useState<number[][]>();
+  const [pell, setPell] = useState<number[][]>();
 
-  const freshmanOrTransfer: string = (props.calculationData['form-highschool-transfer'] === "High School")? "freshman":"transfer";
+  const freshmanOrTransfer: string = (
+    props.calculationData['form-highschool-transfer'] === "High School"
+    )? "freshman":"transfer";
 
-  const meritMode: string = (Number(props.calculationData['form-act']) === 0 && Number(props.calculationData['form-erw-sat']) === 0 && Number(props.calculationData['form-math-sat']) === 0)? "meritwithtest": "merittestoptional";
+  const meritMode: string = (
+    Number(props.calculationData['form-act']) === 0 && 
+    Number(props.calculationData['form-erw-sat']) === 0 && 
+    Number(props.calculationData['form-math-sat']) === 0
+    )? "meritwithtest": "merittestoptional";
 
   // NOTE: Universal function to fetch data as we need it
   const fetchData = async (url: string) => {
@@ -64,19 +72,33 @@ export default function Summary(props: SummaryProps) {
         .then(json => {
           return json.data;
         }),
-        fetchData(`/rest/data/costcalculator/get/${freshmanOrTransfer}${meritMode}`)
+        fetchData(`/rest/data/costcalculator/get/${freshmanOrTransfer}${meritMode}/`)
         .then(json => {
           return json.data;
+        }),
+        fetchData(`/rest/data/costcalculator/get/pell/`)
+        .then(json => {
+          return json;
         })
       ])
-      .then(([needs, merit]) => {
+      .then(([needs, merit, pell]) => {
         setNeedsTable(needs);
         setMeritTable(merit);
-      });
+        setPell(pell);
+      })
+      .then(() => {
+        if(props.calculationData['form-current-residence'] === "New Jersey") {
+          fetchData(`/rest/data/costcalculator/get/tag/`)
+          .then(json => setTag(json));
+        }
+      })
     });  
   },[props.calculationData, freshmanOrTransfer, meritMode]);
 
   return (
+    <>
+    {/* Fire off function in here to do the calculation now that we have all the data */}
     <p>Loading...</p>
+    </>
   );
 }
