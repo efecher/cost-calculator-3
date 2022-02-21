@@ -4,7 +4,8 @@
 export default function determineDependency(
   age: number, 
   childSupport: boolean, 
-  married: boolean)
+  married: boolean
+)
   : string {
     
   let dependency = "";
