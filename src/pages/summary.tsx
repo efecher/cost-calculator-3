@@ -98,7 +98,11 @@ export default function Summary(props: SummaryProps) {
   return (
     <>
     {/* Fire off function in here to do the calculation now that we have all the data */}
-    <p>Loading...</p>
+    {
+      ([efcValue,needsTable,meritTable,pell,tag] !== undefined)
+      ? <h1>Got All Data!</h1> /* code here to process the data now that we have it */
+      : <p>Loading...</p>
+    }
     </>
   );
 }
