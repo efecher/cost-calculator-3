@@ -79,21 +79,38 @@ export function resolveNeedsMode(residency: boolean, freshman: boolean): string 
     // NOTE: User is NJ Resident
     if(freshman) {
       // NOTE User is freshman
-      console.log("freshmanneedsbasednj");
+      //console.log("freshmanneedsbasednj");
       return "freshmanneedsbasednj";
     } else {
       // NOTE: User is transfer
-      console.log("transferneedsbasednj");
+      //console.log("transferneedsbasednj");
       return "transferneedsbasednj";
     }
   } else {
     // NOTE: User is NOT NJ Resident
     if(freshman) {
-      console.log("freshmannnedsbasednonnj");
+      //console.log("freshmannnedsbasednonnj");
       return "freshmannnedsbasednonnj";
     } else {
-      console.log("transferneedsbasednonnj");
+      //console.log("transferneedsbasednonnj");
       return "transferneedsbasednonnj";
     }
+  }
+}
+
+export function determineMeritTable(freshmanOrTransfer: string, meritMode: string): string {
+
+  // NOTE:  For Freshman it could be WITH or WITHOUT test
+  //        scores. Transfer is without test scores.
+  if(freshmanOrTransfer === "freshman") {
+    if(meritMode === "meritwithtest") {
+      return "freshmanmeritwithtest";
+    } else {
+      return "merittestoptional";
+    }
+  } else {
+    // NOTE:  Transfer, doesn't use test scores uses it's 
+    //        own different "merit" table  
+    return "transfermeritbased";
   }
 }

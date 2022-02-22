@@ -13,7 +13,7 @@ import calculateNeeds from '../calculation/calculate-needs';
 import determineDependency from '../calculation/dependency';
 
 export default function Summary(props: SummaryProps) {
-  const [efcValue, setEFCValue] = useState<number>();
+  const [efcValue, setEFCValue] = useState<number>(0);
   const [needsTable, setNeedsTable] = useState<number[][]>();
   const [meritTable, setMeritTable] = useState<number[][]>();
   const [tag, setTag] = useState<number[][]>();
@@ -64,6 +64,7 @@ export default function Summary(props: SummaryProps) {
     })
     .then(() => {
       Promise.all([
+        // NOTE:  Needs data table
         fetchData(`/rest/data/costcalculator/get/${
         Util.resolveNeedsMode(
           (props.calculationData['form-current-residence'] === "New Jersey")? true: false,
@@ -72,7 +73,8 @@ export default function Summary(props: SummaryProps) {
         .then(json => {
           return json.data;
         }),
-        fetchData(`/rest/data/costcalculator/get/${freshmanOrTransfer}${meritMode}/`)
+        // NOTE:  Merit table - depends on if we need to use test scores or not
+        fetchData(`/rest/data/costcalculator/get/${Util.determineMeritTable(freshmanOrTransfer, meritMode)}/`)
         .then(json => {
           return json.data;
         }),
@@ -90,6 +92,8 @@ export default function Summary(props: SummaryProps) {
         if(props.calculationData['form-current-residence'] === "New Jersey") {
           fetchData(`/rest/data/costcalculator/get/tag/`)
           .then(json => setTag(json));
+        } else {
+          setTag([[]]); // NOTE: empty if transfer student, only for NJ. Set someting other than undefined so there will be "data" for it to clear below in the JSX return
         }
       })
     });  
@@ -99,9 +103,9 @@ export default function Summary(props: SummaryProps) {
     <>
     {/* Fire off function in here to do the calculation now that we have all the data */}
     {
-      ([efcValue,needsTable,meritTable,pell,tag] !== undefined)
-      ? <h1>Got All Data!</h1> /* code here to process the data now that we have it */
-      : <p>Loading...</p>
+      ([efcValue,needsTable,meritTable,pell,tag].includes(undefined))
+      ? <h1>Loading...</h1>
+      : <h1>Got All Data!</h1> /* code here to process the data now that we have it */
     }
     </>
   );
