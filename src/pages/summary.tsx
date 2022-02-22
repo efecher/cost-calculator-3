@@ -8,16 +8,19 @@ import React, {useState, useEffect} from 'react';
 // import Button from 'react-bootstrap/Button';
 // import Alert from 'react-bootstrap/Alert';
 import * as Util from '../util/util';
+import calculationReport from '../calculation/calculation-report';
 import calculateEFC from '../calculation/calculate-efc';
-import calculateNeeds from '../calculation/calculate-needs';
 import determineDependency from '../calculation/dependency';
 
 export default function Summary(props: SummaryProps) {
   const [efcValue, setEFCValue] = useState<number>(0);
+
+  // NOTE:  state hooks to hold the tables retrieved 
   const [needsTable, setNeedsTable] = useState<number[][]>();
   const [meritTable, setMeritTable] = useState<number[][]>();
   const [tag, setTag] = useState<number[][]>();
   const [pell, setPell] = useState<number[][]>();
+  //////////////////////////////////////////////////
 
   const freshmanOrTransfer: string = (
     props.calculationData['form-highschool-transfer'] === "High School"
@@ -99,13 +102,32 @@ export default function Summary(props: SummaryProps) {
     });  
   },[props.calculationData, freshmanOrTransfer, meritMode]);
 
+  const finalCalculationPackage = (): object => {
+    const cdata: object = {
+      userInput: props.calculationData, // NOTE:  all of the user inputs
+      efc: efcValue, // NOTE: the EFC value we calculated here
+      meritMode: meritMode,
+      // NOTE:  given the userInput, the correct values will be pulled from 
+      //        these tables in the final tally
+      meritTable: meritTable, 
+      needsTable: needsTable,
+      pell: pell,
+      tag: tag
+    }
+    return cdata;
+  }
+
   return (
     <>
     {/* Fire off function in here to do the calculation now that we have all the data */}
     {
       ([efcValue,needsTable,meritTable,pell,tag].includes(undefined))
       ? <h1>Loading...</h1>
-      : <h1>Got All Data!</h1> /* code here to process the data now that we have it */
+      : <>{
+            // NOTE: package up the data and display the returned report
+            calculationReport(finalCalculationPackage())
+          }
+        </> 
     }
     </>
   );
