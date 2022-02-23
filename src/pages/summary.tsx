@@ -1,101 +1,134 @@
 ///<reference path="../typings/component.d.ts" />
 
-import React from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Table from 'react-bootstrap/Table';
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert';
-import { generateReport } from '../calculation/calculation';
+import React, {useState, useEffect} from 'react';
+// import Row from 'react-bootstrap/Row';
+// import Col from 'react-bootstrap/Col';
+// import Table from 'react-bootstrap/Table';
+// import Container from 'react-bootstrap/Container';
+// import Button from 'react-bootstrap/Button';
+// import Alert from 'react-bootstrap/Alert';
+import * as Util from '../util/util';
+import calculationReport from '../calculation/calculation-report';
+import calculateEFC from '../calculation/calculate-efc';
+import determineDependency from '../calculation/dependency';
 
-export const Summary: React.FC<SummaryProps> = (props) => {
-  let results: Report = generateReport(props.calculationData);
+export default function Summary(props: SummaryProps) {
+  const [efcValue, setEFCValue] = useState<number>(0);
+
+  // NOTE:  state hooks to hold the tables retrieved 
+  const [needsTable, setNeedsTable] = useState<number[][]>();
+  const [meritTable, setMeritTable] = useState<number[][]>();
+  const [tag, setTag] = useState<number[][]>();
+  const [pell, setPell] = useState<number[][]>();
+  //////////////////////////////////////////////////
+
+  const freshmanOrTransfer: string = (
+    props.calculationData['form-highschool-transfer'] === "High School"
+    )? "freshman":"transfer";
+
+  const meritMode: string = (
+    Number(props.calculationData['form-act']) === 0 && 
+    Number(props.calculationData['form-erw-sat']) === 0 && 
+    Number(props.calculationData['form-math-sat']) === 0
+    )? "meritwithtest": "merittestoptional";
+
+  // NOTE: Universal function to fetch data as we need it
+  const fetchData = async (url: string) => {
+    try {
+      const response = await fetch(url);
+      if(response.ok) {
+        return response.json();
+      } else {
+        throw new Error("Error retrieving the data");
+      }
+    } catch (error) {
+      throw new Error("Data not found.");
+    }
+  };
+
+  useEffect(() => {
+    // NOTE:  figure out dependency so we fetch the correct 
+    //        matrix (there are 3: efcDependend, 
+    //        efcindependentwithdependents and 
+    //        efcindependentnodependents)
+    fetchData(`/rest/data/costcalculator/get/${
+      determineDependency(
+        Number(props.calculationData['form-age']),
+        (props.calculationData['form-children'] !== "No")? true:false,
+        (props.calculationData['form-marital-status'] !== "No")? true:false)
+      }/`) 
+    .then(json => {
+      setEFCValue(calculateEFC(
+        json.data,
+        Util.resolveNumberInCollege(props.calculationData['form-people-in-college']),
+        Util.resolveNumberInFamily(props.calculationData['form-people-in-household']),
+        Util.resolveIncomeRange(props.calculationData['form-household-income'])
+      ));
+    })
+    .then(() => {
+      Promise.all([
+        // NOTE:  Needs data table
+        fetchData(`/rest/data/costcalculator/get/${
+        Util.resolveNeedsMode(
+          (props.calculationData['form-current-residence'] === "New Jersey")? true: false,
+          (props.calculationData['form-highschool-transfer'] === "High School")? true : false)
+        }/`)
+        .then(json => {
+          return json.data;
+        }),
+        // NOTE:  Merit table - depends on if we need to use test scores or not
+        fetchData(`/rest/data/costcalculator/get/${Util.determineMeritTable(freshmanOrTransfer, meritMode)}/`)
+        .then(json => {
+          return json.data;
+        }),
+        fetchData(`/rest/data/costcalculator/get/pell/`)
+        .then(json => {
+          return json;
+        })
+      ])
+      .then(([needs, merit, pell]) => {
+        setNeedsTable(needs);
+        setMeritTable(merit);
+        setPell(pell);
+      })
+      .then(() => {
+        if(props.calculationData['form-current-residence'] === "New Jersey") {
+          fetchData(`/rest/data/costcalculator/get/tag/`)
+          .then(json => setTag(json));
+        } else {
+          setTag([[]]); // NOTE: empty if transfer student, only for NJ. Set someting other than undefined so there will be "data" for it to clear below in the JSX return
+        }
+      })
+    });  
+  },[props.calculationData, freshmanOrTransfer, meritMode]);
+
+  const finalCalculationPackage = (): object => {
+    const cdata: object = {
+      userInput: props.calculationData, // NOTE:  all of the user inputs
+      efc: efcValue, // NOTE: the EFC value we calculated here
+      meritMode: meritMode,
+      // NOTE:  given the userInput, the correct values will be pulled from 
+      //        these tables in the final tally
+      meritTable: meritTable, 
+      needsTable: needsTable,
+      pell: pell,
+      tag: tag
+    }
+    return cdata;
+  }
 
   return (
-    <Container>
-      <Row>
-        <Col md={12}>
-          <h1>Summary</h1>
-          <Table bordered>
-          <tbody> 
-            <tr>
-              <th>Dependency</th><td>{results.dependency}</td>
-            </tr>
-            <tr>
-              <th>Expected Family Contribution</th><td>{`$${results.EFC}`}</td>
-            </tr>
-            <tr>
-              <th>Pell Grant</th><td>{`$${results.Pell}`}</td>
-            </tr>
-            <tr>
-              <th>Tuition Assistance</th><td>{`$${results.TAG}`}</td>
-            </tr>
-            <tr>
-              <th>Merit Award</th><td>{`$${results.Merit}`}</td>
-            </tr>
-            <tr>
-              <th>Needs-Based Grant</th><td>{`$${results.Needs}`}</td>
-            </tr>
-            </tbody>
-            <tfoot>
-              <tr className="total-estimated">
-                <th>Total Estimated Aid</th>
-                <td>
-                  <strong>
-                    {console.log(results.TAG + results.Pell + results.Merit + results.Needs)}
-                    {` $${results.TAG + results.Pell + results.Merit + results.Needs}`}
-                  </strong>
-                </td>
-              </tr>
-            </tfoot>
-          </Table>
-          <p>
-            Based on the information you have provided, the following calculations represent the average net price of attendance that students similar to you paid in the given year:&nbsp; 
-            <strong>Academic Year: 2020-2021</strong><br />
-          </p>
-          <Table bordered>
-            <tbody> 
-              <tr>
-                <th>Estimated Total Direct Cost</th><td>{`$${results.POA.totalCost}`}</td>
-              </tr>
-              <tr>
-                <th>Estimated Tuition and Fees</th><td>{`$${results.POA.tuitionAndFees}`}</td>
-              </tr>
-              <tr>
-                <th>Estimated Room and Board</th><td>{`$${results.POA.roomAndBoard}`}</td>
-              </tr>
-              <tr>
-                <th>Estimated Total Grant Amount</th><td>{` $${results.TAG + results.Pell + results.Merit + results.Needs}`}</td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr className="total-estimated">
-                <th>Estimated Net Price<br />(direct cost minus aid)
-                </th>
-                <td>
-                  <strong>
-                    {` $${results.POA.totalCost - (results.TAG + results.Pell + results.Merit + results.Needs)}`}
-                  </strong>
-                </td>
-              </tr>
-            </tfoot>
-          </Table>
-          <Alert variant="dark">
-            Please Note: The estimates above apply to full-time, first-time degree/certificate-seeking undergraduate students only. This estimate is based on an expected family contribution (EFC) of <strong>${results.EFC}</strong>. Your actual EFC will be determined each year by filing the FAFSA.<br />
-            These estimates do not represent a final determination, or actual award, of financial assistance or a final net price; they are only estimates based on price of attendance and financial aid provided to students in 2019-2020. Price of attendance and financial aid availability change year to year. These estimates shall not be binding on the Secretary of Education, the institution of higher education, or the State. <br />
-            Not all students receive financial aid. In 2019-2020, 92% of our full-time students enrolling for college for the first time received grant/scholarship aid. Students may also be eligible for student loans and work-study. Students must complete the Free Application for Federal Student Aid (FAFSA) in order to determine their eligibility for Federal financial aid that includes Federal grant, loan, or work-study assistance. For more information on applying for Federal student aid, go to <a aria-label="FAFSA" href="http://www.fafsa.ed.gov/">http://www.fafsa.ed.gov/</a>
-          </Alert>
-          <Row>
-            <Col md={{span: 2, offset: 4}}>
-              <Button variant="success" onClick={(e) => {props.resetHandler(e)}}>Start Over</Button>
-            </Col>
-          </Row>
-          {console.log(results.POA)}
-        </Col> 
-      </Row>
-    </Container>
+    <>
+    {/* Fire off function in here to do the calculation now that we have all the data */}
+    {
+      ([efcValue,needsTable,meritTable,pell,tag].includes(undefined))
+      ? <h1>Loading...</h1>
+      : <>{
+            // NOTE: package up the data and display the returned report
+            calculationReport(finalCalculationPackage())
+          }
+        </> 
+    }
+    </>
   );
 }
-
-export default Summary;

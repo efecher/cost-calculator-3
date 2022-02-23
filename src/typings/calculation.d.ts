@@ -17,11 +17,13 @@ interface NeedsTables {
   transferNeedsBasedEFCNonNJResident: number[][]
 }
 
+interface HTTPResponse<T> extends Response {
+  parsedBody?: T
+}
+
 interface EFCTable {
-  numberInCollege: number,
-  numberInFamily: number,
-  incomeRanges: number[]
-}  
+  data: number[][];
+}
 
 interface POATable {
   poatotaladmissioncost: number[]
