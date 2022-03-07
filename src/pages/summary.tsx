@@ -11,17 +11,20 @@ import * as Util from '../util/util';
 import calculationReport from '../calculation/calculation-report';
 import calculateEFC from '../calculation/calculate-efc';
 import determineDependency from '../calculation/dependency';
+import calculateTAG from '../calculation/calculate-tag';
+import calculatePell from '../calculation/calculate-pell';
 
 export default function Summary(props: SummaryProps) {
   const [efcValue, setEFCValue] = useState<number>(0);
 
   // NOTE:  state hooks to hold the tables retrieved 
-  const [needsTable, setNeedsTable] = useState<number[][]>();
-  const [meritTable, setMeritTable] = useState<number[][]>();
-  const [tag, setTag] = useState<number[][]>();
-  const [pell, setPell] = useState<number[][]>();
+  const [needsTable, setNeedsTable] = useState<number[][]>([[]]);
+  const [meritTable, setMeritTable] = useState<number[][]>([[]]);
+  const [tag, setTag] = useState<number[][]>([[]]);
+  const [pell, setPell] = useState<number[][]>([[]]);
   //////////////////////////////////////////////////
 
+  // NOTE:  Translate a couple things into useable values in the calculation
   const freshmanOrTransfer: string = (
     props.calculationData['form-highschool-transfer'] === "High School"
     )? "freshman":"transfer";
@@ -51,6 +54,8 @@ export default function Summary(props: SummaryProps) {
     //        matrix (there are 3: efcDependend, 
     //        efcindependentwithdependents and 
     //        efcindependentnodependents)
+    //        Age < 24 = dependent, married/has children = Independent WITH Dependents
+    //        else Indepnedent with NO Dependents
     fetchData(`/rest/data/costcalculator/get/${
       determineDependency(
         Number(props.calculationData['form-age']),
@@ -89,12 +94,12 @@ export default function Summary(props: SummaryProps) {
       .then(([needs, merit, pell]) => {
         setNeedsTable(needs);
         setMeritTable(merit);
-        setPell(pell);
+        setPell(pell.data);
       })
       .then(() => {
         if(props.calculationData['form-current-residence'] === "New Jersey") {
           fetchData(`/rest/data/costcalculator/get/tag/`)
-          .then(json => setTag(json));
+          .then(json => setTag(json.data));
         } else {
           setTag([[]]); // NOTE: empty if transfer student, only for NJ. Set someting other than undefined so there will be "data" for it to clear below in the JSX return
         }
@@ -111,24 +116,17 @@ export default function Summary(props: SummaryProps) {
       //        these tables in the final tally
       meritTable: meritTable, 
       needsTable: needsTable,
-      pell: pell,
-      tag: tag
+      pell: calculatePell(efcValue, pell),
+      tag: calculateTAG(props.calculationData['form-current-residence'], tag, efcValue)
     }
+
+
     return cdata;
   }
 
   return (
     <>
-    {/* Fire off function in here to do the calculation now that we have all the data */}
-    {
-      ([efcValue,needsTable,meritTable,pell,tag].includes(undefined))
-      ? <h1>Loading...</h1>
-      : <>{
-            // NOTE: package up the data and display the returned report
-            calculationReport(finalCalculationPackage())
-          }
-        </> 
-    }
+    {console.log(finalCalculationPackage())}
     </>
   );
 }
