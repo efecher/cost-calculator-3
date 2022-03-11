@@ -74,10 +74,10 @@ export function resolveNumberInCollege(value: string): number {
 // NOTE:  determine needs mode based on 
 //        - true = NJ Residnet, fasle = out of state
 //        - true = freshman, false = transfer student
-export function resolveNeedsMode(residency: boolean, freshman: boolean): string {
-  if(residency) {
+export function resolveNeedsMode(residency: string, freshman: string): string {
+  if(residency === "New Jersey") {
     // NOTE: User is NJ Resident
-    if(freshman) {
+    if(freshman === "freshman") {
       // NOTE User is freshman
       //console.log("freshmanneedsbasednj");
       return "freshmanneedsbasednj";
@@ -88,7 +88,7 @@ export function resolveNeedsMode(residency: boolean, freshman: boolean): string 
     }
   } else {
     // NOTE: User is NOT NJ Resident
-    if(freshman) {
+    if(freshman === "freshman") {
       //console.log("freshmannnedsbasednonnj");
       return "freshmannnedsbasednonnj";
     } else {

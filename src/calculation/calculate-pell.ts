@@ -1,6 +1,6 @@
 export default function calculatePell(
-  efc: number, 
-  pellTable: number[][]
+  pellTable: number[][],
+  efc: number
   ): number {
 
   //console.log(pellTable);
