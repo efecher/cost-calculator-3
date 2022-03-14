@@ -114,3 +114,15 @@ export function determineMeritTable(freshmanOrTransfer: string, meritMode: strin
     return "transfermeritbased";
   }
 }
+
+export function determineDependency(age: number, children: boolean, married: boolean): string {
+  if (age < 24) {
+    return "efcindependent";
+  } else {
+    if(children || married) {
+      return "efcindependentwithdependents";
+    } else {
+      return "efcindependentnodependents";
+    }
+  }
+}

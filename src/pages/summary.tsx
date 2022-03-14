@@ -10,7 +10,7 @@ import React, {useState, useEffect} from 'react';
 import * as Util from '../util/util';
 
 import calculateEFC from '../calculation/calculate-efc';
-import determineDependency from '../calculation/dependency';
+
 import calculateTAG from '../calculation/calculate-tag';
 import calculatePell from '../calculation/calculate-pell';
 import calculateNeeds from '../calculation/calculate-needs';
@@ -59,7 +59,7 @@ export default function Summary(props: SummaryProps) {
     Promise.all([
       // NOTE:  EFC
       fetchData(`/rest/data/costcalculator/get/${
-        determineDependency(
+        Util.determineDependency(
           Number(props.calculationData['form-age']),
           (props.calculationData['form-children'] !== "No")? true:false,
           (props.calculationData['form-marital-status'] !== "No")? true:false)
@@ -75,9 +75,9 @@ export default function Summary(props: SummaryProps) {
       // NOTE:  Needs Value
       fetchData(`/rest/data/costcalculator/get/${
       Util.resolveNeedsMode(
-        (props.calculationData['form-current-residence'] === "New Jersey")? true: false,
-        (props.calculationData['form-highschool-transfer'] === "High School")? true : false)
-      }/`)
+        props.calculationData['form-current-residence'],
+        props.calculationData['form-highschool-transfer']
+      )}/`)
       .then(json => {
         return calculateNeeds(
           json.data, 
