@@ -70,6 +70,9 @@ export default async function gatherData(userInput: CalculationData): Promise<{}
       );
     });
   
+  Promise.all([
+    
+  ])
   
 
   return {
