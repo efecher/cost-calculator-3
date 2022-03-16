@@ -2,15 +2,18 @@ export default function calculateMerit(
   matrix: number[][],
   gpa: number,
   studentStatus: string,
-  sat?: number,
-  act?: number
+  sat: number,
+  act: number
 ) {
   let result: number = 0;
 
   console.log(studentStatus);
   if(studentStatus === "freshman") {
     // NOTE:  freshman
-    if(typeof sat !== 'undefined') {
+    console.log(sat);
+    console.log(act);
+    if(sat >= 400) {
+      // NOTE:  SAT has range of 400-1600 (combined), anything less than 400 assume to be input error and treat as the user meant to leave at zero/didn't take this test/doesn't want to use the score
       // NOTE:  with test scores and using SAT
       // NOTE:  find the row we need
       for(let r of matrix) {
@@ -25,7 +28,8 @@ export default function calculateMerit(
       }
     }
 
-    if(typeof act !== 'undefined') {
+    if(act > 0) {
+      // NOTE:  ACT has a range of 1 to 36. If left zero, assume user doesn't want to use this test score or didn't take the test. Use the GPA method to calculate Merit
       // NOTE:  with test scores and using ACT
       // NOTE:  find the row we need
       for(let r of matrix) {
@@ -39,6 +43,20 @@ export default function calculateMerit(
         }
       }
     }
+
+    if(sat === 0 && act === 0) {
+      // NOTE:  Merit using GPA ("test optional"), this is a different matrix than the one used to compute based on ACT/SAT 
+      console.log("merit test optional");
+      for(let r of matrix) {
+        if((gpa >= r[0]) && (gpa <= r[1])) {
+          // NOTE:  GPA is in range for this row
+          result = r[2];
+          console.log(result);
+          break;
+        }
+      }
+
+    }
   } else {
     // NOTE:  transfer
     // NOTE:  find the row we need
@@ -50,5 +68,6 @@ export default function calculateMerit(
     }
   }
 
+  console.log(result);
   return result;
 }

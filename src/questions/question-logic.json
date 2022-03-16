@@ -9,8 +9,7 @@
     },
     {
       "logicORLeft": [
-        "form-erw-sat",
-        "form-math-sat"
+        "form-sat"
       ],
       "logicORRight": [
         "form-act"

@@ -3,10 +3,11 @@ import determineDependency from './dependency';
 import * as Util from '../util/util';
 import calculateEFC from '../calculation/calculate-efc';
 import calculateNeeds from './calculate-needs';
+import calculateMerit from './calculate-merit';
 // NOTE:  based on user inputs, determine the data we need to perform 
 //        the calculations.
 
-export default async function gatherData(userInput: CalculationData): Promise<{}> {
+export default async function gatherData(userInput: CalculationData): Promise<any> {
   // NOTE:  set up a few values we may need later
   // NOTE:  based on input, resolve whether user is Freshman or Transfer 
   //        (this is used for the REST URL we call for data)
@@ -71,13 +72,29 @@ export default async function gatherData(userInput: CalculationData): Promise<{}
     });
   
   Promise.all([
-    
-  ])
-  
+    await fetchData(needsURL)
+    .then(json => {return json.data}),
 
-  return {
+    await fetchData(meritURL)
+    .then(json => {return json.data})
+
+  ]).then(([needsMatrix, meritMatrix]) => { 
+    //console.log(result);
+    let needsValue = calculateNeeds(needsMatrix, efcValue, Number(userInput['form-current-gpa']), freshmanOrTransfer);
     
-  };
+    let meritValue = calculateMerit(
+      meritMatrix, 
+      Number(userInput['form-current-gpa']), 
+      freshmanOrTransfer, 
+      Number(userInput['form-sat']),
+      Number(userInput['form-act'])
+    );
+
+    return {
+      needsValue: needsValue,
+      meritValue: meritValue
+    };
+  }); 
 }
 
 // NOTE: Universal function to fetch data as we need it

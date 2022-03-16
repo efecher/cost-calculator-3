@@ -5,8 +5,8 @@ export default function calculateNeeds(
   studentStatus: string
 ): number {
 // NOTE:  we should have the correct matrix based on residency and freshman/transfer already. Use the values passed in for EFC & GPA to find the needs value
-  console.log(matrix);
-  console.log(gpa);
+  // console.log(matrix);
+  // console.log(gpa);
   let row: number[] = [];
   let result: number = 0;
 

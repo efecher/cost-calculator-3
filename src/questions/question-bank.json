@@ -63,28 +63,16 @@
       }
     ],
     [{
-        "controlId": "erw-sat",
-        "label": "ERW SAT",
+        "controlId": "sat",
+        "label": "SAT",
         "controlType": "number",
-        "text": "What was your SAT Reading/Writing score? Leave as \u20180\u2018 if not applicable.",
+        "text": "What was your Combined SAT (Math + Writing) score? Leave as \u20180\u2018 if not applicable.",
         "min": "0",
-        "max": "800",
+        "max": "1600",
         "default": "0",
         "step": "1",
         "options": [],
-        "stateStorageID": "form-erw-sat"
-      },
-      {
-        "controlId": "math-sat",
-        "label": "Math SAT",
-        "controlType": "number",
-        "text": "What was your SAT Math score? Leave as \u20180\u2018 if not applicable.",
-        "min": "0",
-        "max": "800",
-        "default": "0",
-        "step": "1",
-        "options": [],
-        "stateStorageID": "form-math-sat"
+        "stateStorageID": "form-sat"
       },
       {
         "controlId": "act",

@@ -90,7 +90,7 @@ export function resolveNeedsMode(residency: string, freshman: string): string {
     // NOTE: User is NOT NJ Resident
     if(freshman === "freshman") {
       //console.log("freshmannnedsbasednonnj");
-      return "freshmannnedsbasednonnj";
+      return "freshmanneedsbasednonnj";
     } else {
       //console.log("transferneedsbasednonnj");
       return "transferneedsbasednonnj";
