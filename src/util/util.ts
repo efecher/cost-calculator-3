@@ -10,8 +10,6 @@ export function prop<T, K extends keyof T>(obj: T, key: K):T[K] {
   return obj[key];
 }
 
-
-
 /* NOTE: resolveIncomeRange
 *  given the income range as a string from the value 
 *  of the radio button the user selected, resolve into a number
