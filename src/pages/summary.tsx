@@ -6,6 +6,9 @@ import calculateNeeds from '../calculation/calculate-needs';
 import determineDependency from '../calculation/dependency';
 
 export default function Summary(props: SummaryProps) {
+  const [report, setReport] = useState<object>({});
+  
+  
   // NOTE: Universal function to fetch data as we need it
   const fetchData = async (url: string) => {
     try {
@@ -80,6 +83,10 @@ export default function Summary(props: SummaryProps) {
         Util.resolveNumberInFamily(props.calculationData['form-people-in-household']),
         Util.resolveIncomeRange(props.calculationData['form-household-income'])
       ) || 0;
+      setReport({
+        ...report,
+        efcValue: efc
+      });
       return efc;
     })
     .then(efc => {
@@ -93,7 +100,10 @@ export default function Summary(props: SummaryProps) {
           freshmanOrTransfer
         )
       })
-      .then(response => {console.log(`Needs: ${response}`)})
+      .then(needs => {
+        
+        console.log(`Needs: ${needs}`)
+      })
     });
   }, []);
   
