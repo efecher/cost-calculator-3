@@ -6,6 +6,7 @@ import calculateNeeds from '../calculation/calculate-needs';
 import determineDependency from '../calculation/dependency';
 import calculateMerit from '../calculation/calculate-merit';
 import calculateTAG from '../calculation/calculate-tag';
+import calculatePell from '../calculation/calculate-pell';
 
 
 export default function Summary(props: SummaryProps) {
@@ -132,14 +133,21 @@ export default function Summary(props: SummaryProps) {
         let tag: number = calculateTAG(props.calculationData['form-current-residence'], json.data, report.efcValue) || 0;
 
         return tag;
+      }),
+
+      fetchData(pellURL)
+      .then(json => {
+        let pell: number = calculatePell(json.data, report.efcValue) || 0;
+        return pell;
       })
     ])
-    .then(([needs, tag]) => {
+    .then(([needs, tag, pell]) => {
       efcDependentValuesRetrieved.current = true;
       setReport({
         ...report,
         needs: needs,
-        tag: tag
+        tag: tag,
+        pell: pell
       });
     });
   }
