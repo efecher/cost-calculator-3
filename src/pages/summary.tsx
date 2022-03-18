@@ -7,6 +7,7 @@ import determineDependency from '../calculation/dependency';
 import calculateMerit from '../calculation/calculate-merit';
 import calculateTAG from '../calculation/calculate-tag';
 
+
 export default function Summary(props: SummaryProps) {
   const [report, setReport] = useState<Report>({
     efcValue: 0,
@@ -17,9 +18,8 @@ export default function Summary(props: SummaryProps) {
   });
   
   // NOTE:  reference to persist this value between renders. We use this to signal when we have fully retrieved and calculated the individual values so useEffect doesn't trigger an infinite loop from state updates.
-  const efcRetrieved = useRef<boolean>(false);
-  const needsRetrieved = useRef<boolean>(false);
-  //const tagRetrieved = useRef<boolean>(false);
+  const efcMeritRetrieved = useRef<boolean>(false);
+  const efcDependentValuesRetrieved = useRef<boolean>(false);
 
   // NOTE: Universal function to fetch data as we need it
   const fetchData = async (url: string) => {
@@ -87,36 +87,61 @@ export default function Summary(props: SummaryProps) {
   
   // NOTE:  obtain EFC value, which many other things depend on.
   useEffect(() => {
-    if(!efcRetrieved.current) {
-      fetchData(efcURL)
-      .then(json => {
-        let efc: number = calculateEFC(
-          json.data,
-          Util.resolveNumberInFamily(props.calculationData['form-people-in-college']),
-          Util.resolveNumberInFamily(props.calculationData['form-people-in-household']),
-          Util.resolveIncomeRange(props.calculationData['form-household-income'])
-        ) || 0;
-        efcRetrieved.current = true;
+    if(!efcMeritRetrieved.current) {
+      Promise.all([
+        fetchData(efcURL)
+        .then(json => {
+          let efc: number = calculateEFC(
+            json.data,
+            Util.resolveNumberInFamily(props.calculationData['form-people-in-college']),
+            Util.resolveNumberInFamily(props.calculationData['form-people-in-household']),
+            Util.resolveIncomeRange(props.calculationData['form-household-income'])
+          ) || 0;
+          return efc;
+        }),
+
+        fetchData(meritURL)
+        .then(json => {
+          let merit: number = calculateMerit(json.data, Number(props.calculationData['form-current-gpa']), freshmanOrTransfer, Number(props.calculationData['form-sat']), Number(props.calculationData['form-act'])) || 0;
+          return merit;
+        })
+      ])
+      .then(([efc, merit]) => {
+        efcMeritRetrieved.current = true;
         setReport({
           ...report,
-          efcValue: efc
-        }); 
+          efcValue: efc,
+          merit: merit
+        });
       });
     }
-  }, []); 
+  },[efcURL, meritURL, report]);
 
   // NOTE: once we have the EFC value, retrieve other values dependent on it
- 
-  if(efcRetrieved.current && !needsRetrieved.current) {
-    fetchData(needsURL)
-    .then(json => {
-      let needs: number = calculateNeeds(json.data, report.efcValue, Number(props.calculationData['form-current-gpa']), freshmanOrTransfer) || 0;
-      needsRetrieved.current = true;
+  if(efcMeritRetrieved.current && !efcDependentValuesRetrieved.current) {
+    Promise.all([
+      fetchData(needsURL)
+      .then(json => {
+        let needs: number = calculateNeeds(json.data, report.efcValue, Number(props.calculationData['form-current-gpa']), freshmanOrTransfer) || 0;
+        
+        return needs;
+      }),
+
+      fetchData(tagURL)
+      .then(json => {
+        let tag: number = calculateTAG(props.calculationData['form-current-residence'], json.data, report.efcValue) || 0;
+
+        return tag;
+      })
+    ])
+    .then(([needs, tag]) => {
+      efcDependentValuesRetrieved.current = true;
       setReport({
         ...report,
-        needs: needs
+        needs: needs,
+        tag: tag
       });
-    })
+    });
   }
   
   
