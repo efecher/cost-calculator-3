@@ -116,7 +116,7 @@ export default function Summary(props: SummaryProps) {
         });
       });
     }
-  },[efcURL, meritURL, report]);
+  },[efcURL, meritURL, report, freshmanOrTransfer, props]);
 
   // NOTE: once we have the EFC value, retrieve other values dependent on it
   if(efcMeritRetrieved.current && !efcDependentValuesRetrieved.current) {
@@ -157,6 +157,14 @@ export default function Summary(props: SummaryProps) {
   
   
 
-  return <p>Results.</p>
+  return (
+    <ul>
+      <li><strong>EFC:</strong> {report.efcValue}</li>
+      <li><strong>Merit: </strong> {report.merit}</li>
+      <li><strong>Needs:</strong> {report.needs}</li>
+      <li><strong>Pell:</strong> {report.pell}</li>
+      <li><strong>TAG:</strong> {report.tag}</li>
+    </ul>
+  );
   
 }
