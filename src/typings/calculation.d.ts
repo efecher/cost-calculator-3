@@ -38,11 +38,7 @@ interface CalculationData {
 }
 
 interface Report {
-  dependency: string,
-  EFC: number,
-  Pell: number,
-  TAG: number,
-  Merit: number,
-  Needs: number,
-  POA: LooseObject
+  efcValue: number,
+  needs: number,
+  merit: number
 }

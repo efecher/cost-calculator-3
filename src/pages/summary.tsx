@@ -1,14 +1,21 @@
 ///<reference path="../typings/component.d.ts" />
 import * as Util from '../util/util';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import calculateEFC from '../calculation/calculate-efc';
 import calculateNeeds from '../calculation/calculate-needs';
 import determineDependency from '../calculation/dependency';
+import calculateMerit from '../calculation/calculate-merit';
 
 export default function Summary(props: SummaryProps) {
-  const [report, setReport] = useState<object>({});
+  const [report, setReport] = useState<Report>({
+    efcValue: 0,
+    needs: -1,
+    merit: -1,
+  });
   
-  
+  // NOTE:  reference to persist this value between renders. We use this to signal when we have fully retrieved and calculated the individual values so useEffect doesn't trigger an infinite loop from state updates.
+  const dataFullyRetrieved = useRef<boolean>(false);
+
   // NOTE: Universal function to fetch data as we need it
   const fetchData = async (url: string) => {
     try {
@@ -75,41 +82,62 @@ export default function Summary(props: SummaryProps) {
   
   // NOTE:  obtain EFC value, which many other things depend on.
   useEffect(() => {
-    fetchData(efcURL)
-    .then(json => {
-      let efc: number = calculateEFC(
-        json.data,
-        Util.resolveNumberInFamily(props.calculationData['form-people-in-college']),
-        Util.resolveNumberInFamily(props.calculationData['form-people-in-household']),
-        Util.resolveIncomeRange(props.calculationData['form-household-income'])
-      ) || 0;
-      setReport({
-        ...report,
-        efcValue: efc
-      });
-      return efc;
-    })
-    .then(efc => {
-      // NOTE:  Do our Needs data retrieval and calculation
-      fetchData(needsURL)
+    if(!dataFullyRetrieved.current) {
+      fetchData(efcURL)
       .then(json => {
-        return calculateNeeds(
+        let efc: number = calculateEFC(
           json.data,
-          efc,
-          Number(props.calculationData['form-gpa']),
-          freshmanOrTransfer
-        )
+          Util.resolveNumberInFamily(props.calculationData['form-people-in-college']),
+          Util.resolveNumberInFamily(props.calculationData['form-people-in-household']),
+          Util.resolveIncomeRange(props.calculationData['form-household-income'])
+        ) || 0;
+        setReport({
+          ...report,
+          efcValue: efc
+        });
+        return efc;
       })
-      .then(needs => {
-        
-        console.log(`Needs: ${needs}`)
-      })
-    });
-  }, []);
+      .then(efc => {
+        Promise.all([
+          // NOTE:  Do our Needs data retrieval and calculation
+          fetchData(needsURL)
+          .then(json => {
+            return calculateNeeds(
+              json.data,
+              efc,
+              Number(props.calculationData['form-gpa']),
+              freshmanOrTransfer
+            );
+          }),
+
+          // NOTE: Do our Merit data retrieval and calculation
+          fetchData(meritURL)
+          .then(json => {
+            return calculateMerit(
+              json.data,
+              Number(props.calculationData['form-gpa']),
+              freshmanOrTransfer,
+              Number(props.calculationData['form-sat']),
+              Number(props.calculationData['form-act'])
+            );
+          })
+        ])
+        .then(([needs, merit]) => {
+          // NOTE:  When all values retireved and calculated, store in state variable for display
+          setReport((report) => ({
+            ...report,
+            needs: needs,
+            merit: merit
+          }));
+
+          dataFullyRetrieved.current = true;
+        });
+      });
+    }
+  }, [efcURL, freshmanOrTransfer, meritURL, needsURL, props.calculationData, report]);
   
   
-  
-  
+
   return <p>Results.</p>
   
 }
