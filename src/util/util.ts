@@ -20,14 +20,14 @@ export function resolveIncomeRange(range: string): number {
   let index: number = 0;
   
   switch(range) {
-    case "$30,000 - $39,999": index = 4; break;
-    case "$40,000 - $49,999": index = 5; break;
-    case "$50,000 - $59,999": index = 6; break;
-    case "$60,000 - $69,999": index = 7; break;
-    case "$70,000 - $79,999": index = 8; break;
-    case "$80,000 - $89,999": index = 9; break;
-    case "$90,000 - $99,999": index = 10; break;
-    case "$100,000 or above": index = 11; break;
+    case "$30,000 - $39,999": index = 3; break;
+    case "$40,000 - $49,999": index = 4; break;
+    case "$50,000 - $59,999": index = 5; break;
+    case "$60,000 - $69,999": index = 6; break;
+    case "$70,000 - $79,999": index = 7; break;
+    case "$80,000 - $89,999": index = 8; break;
+    case "$90,000 - $99,999": index = 9; break;
+    case "$100,000 or above": index = 10; break;
     default: index = 3; break;
    }  
 
@@ -47,9 +47,9 @@ export function resolveNumberInFamily(value: string): number {
     case "Four": returnValue = 4; break;
     case "Five": returnValue = 5; break;
     case "Six or more": returnValue = 6; break;
-    default: returnValue = 2; break;
+    default: returnValue = 2; 
   }
-
+  
   return returnValue;
 }
 
@@ -65,7 +65,7 @@ export function resolveNumberInCollege(value: string): number {
     case "Two Children": returnValue = 2; break;
     default: returnValue = 3; break;
   }
-
+  
   return returnValue;
 }
 
@@ -97,7 +97,8 @@ export function resolveNeedsMode(residency: string, freshman: string): string {
 }
 
 export function determineMeritTable(freshmanOrTransfer: string, meritMode: string): string {
-
+  // console.log(`freshmanOrTransfer: ${freshmanOrTransfer}`);
+  // console.log(`Merit Mode: ${meritMode}`);
   // NOTE:  For Freshman it could be WITH or WITHOUT test
   //        scores. Transfer is without test scores.
   if(freshmanOrTransfer === "freshman") {

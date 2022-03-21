@@ -17,6 +17,7 @@ export default function calculateEFC(
       }
     }
 
+    //console.log(`IR: ${incomeRange}`);
   // NOTE:  we found the row, the value for incomeRange
   //        will be the EFC value to return.
     //console.log(row[incomeRange]);

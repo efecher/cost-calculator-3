@@ -18,7 +18,7 @@ export default function Summary(props: SummaryProps) {
     pell: null
   });
   
-  // NOTE:  reference to persist this value between renders. We use this to signal when we have fully retrieved and calculated the individual values so useEffect doesn't trigger an infinite loop from state updates.
+  // NOTE:  reference to persist this value between renders. We use this to signal when we have fully retrieved and calculated the individual values so useEffect doesn't trigger an infinite loop from state updates. React will refresh a component when state is updated so that would also include these values if they were conventional variables, resulting in an endless loop of fetches. useRef perpetuates the state of these variables through refresh so we don't lose their values. 
   const efcMeritRetrieved = useRef<boolean>(false);
   const efcDependentValuesRetrieved = useRef<boolean>(false);
 
@@ -43,16 +43,16 @@ export default function Summary(props: SummaryProps) {
     ? "freshman"
     : "transfer";
 
-  const meritMode: string = (
+  const meritMode = () => {
     // NOTE:  if both ACT and SAT are 0, we aren't using test scores, use the GPA "test-optional" method instead
-    (
-      Number(props.calculationData['form-act']) === 0
-        && 
-      Number(props.calculationData['form-sat']) === 0
-    )
-    ? "meritwithtest"
-    : "merittestoptional"
-  );
+    if(Number(props.calculationData['form-sat']) === 0) {
+      if(Number(props.calculationData['form-act']) === 0) {
+        return "merittestoptional";
+      }
+    }
+    // NOTE: either one of SAT or ACT have a non-zero value.
+    return "meritwithtest";    
+  };
 
   const efcURL: string = (
     // NOTE:  since HTML inputs are string, will need to convert numeric 
@@ -69,18 +69,18 @@ export default function Summary(props: SummaryProps) {
   const needsURL: string = (
     `/rest/data/costcalculator/get/${
       Util.resolveNeedsMode(
-        freshmanOrTransfer,
-        (props.calculationData['form-highschool-transfer'] === "High School")? "freshman" : "transfer"
+        props.calculationData['form-current-residence'],
+        freshmanOrTransfer
       )
     }/`
   );
 
   const meritURL: string = (
     `/rest/data/costcalculator/get/${
-      Util.determineMeritTable(freshmanOrTransfer, meritMode)
+      Util.determineMeritTable(freshmanOrTransfer, meritMode())
     }/`
   );
-  
+  //console.log(`Merit URL: ${meritURL}`);
   // NOTE:  Pell and TAG are constant and don't have variations. TAG is only available to NJ residents.
   const pellURL: string = '/rest/data/costcalculator/get/pell';
 
@@ -89,12 +89,13 @@ export default function Summary(props: SummaryProps) {
   // NOTE:  obtain EFC value, which many other things depend on.
   useEffect(() => {
     if(!efcMeritRetrieved.current) {
+      //console.log(efcURL);
       Promise.all([
         fetchData(efcURL)
         .then(json => {
           let efc: number = calculateEFC(
             json.data,
-            Util.resolveNumberInFamily(props.calculationData['form-people-in-college']),
+            Util.resolveNumberInCollege(props.calculationData['form-people-in-college']),
             Util.resolveNumberInFamily(props.calculationData['form-people-in-household']),
             Util.resolveIncomeRange(props.calculationData['form-household-income'])
           ) || 0;
@@ -103,7 +104,12 @@ export default function Summary(props: SummaryProps) {
 
         fetchData(meritURL)
         .then(json => {
-          let merit: number = calculateMerit(json.data, Number(props.calculationData['form-current-gpa']), freshmanOrTransfer, Number(props.calculationData['form-sat']), Number(props.calculationData['form-act'])) || 0;
+          let merit: number = calculateMerit(
+            json.data, 
+            Number(props.calculationData['form-current-gpa']), freshmanOrTransfer, 
+            Number(props.calculationData['form-sat']), 
+            Number(props.calculationData['form-act'])
+          ) || 0;
           return merit;
         })
       ])
@@ -123,21 +129,33 @@ export default function Summary(props: SummaryProps) {
     Promise.all([
       fetchData(needsURL)
       .then(json => {
-        let needs: number = calculateNeeds(json.data, report.efcValue, Number(props.calculationData['form-current-gpa']), freshmanOrTransfer) || 0;
+        let needs: number = calculateNeeds(
+          json.data, 
+          report.efcValue, 
+          Number(props.calculationData['form-current-gpa']), 
+          freshmanOrTransfer
+        ) || 0;
         
         return needs;
       }),
 
       fetchData(tagURL)
       .then(json => {
-        let tag: number = calculateTAG(props.calculationData['form-current-residence'], json.data, report.efcValue) || 0;
+        let tag: number = calculateTAG(
+          props.calculationData['form-current-residence'], 
+          json.data, 
+          report.efcValue
+        ) || 0;
 
         return tag;
       }),
 
       fetchData(pellURL)
       .then(json => {
-        let pell: number = calculatePell(json.data, report.efcValue) || 0;
+        let pell: number = calculatePell(
+          json.data, 
+          report.efcValue
+        ) || 0;
         return pell;
       })
     ])
@@ -152,11 +170,7 @@ export default function Summary(props: SummaryProps) {
     });
   }
   
-  
-      
-  
-  
-
+  // NOTE: Component Output
   return (
     <ul>
       <li><strong>EFC:</strong> {report.efcValue}</li>
@@ -165,6 +179,5 @@ export default function Summary(props: SummaryProps) {
       <li><strong>Pell:</strong> {report.pell}</li>
       <li><strong>TAG:</strong> {report.tag}</li>
     </ul>
-  );
-  
+  ); 
 }
