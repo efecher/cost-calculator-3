@@ -25,7 +25,7 @@ export const NumericQuestion: React.FC<QuestionComponentProps>  = (props) => {
               if(Number.isInteger(n) === false) {
                 e.target.value = parseFloat(e.target.value).toString();
               }
-              props.changeHandler(e, qd.stateStorageID)
+              props.changeHandler(e, qd.stateStorageID, false)
             }}
           />
         </Col>

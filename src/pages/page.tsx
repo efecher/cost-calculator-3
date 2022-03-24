@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import NumericQuestion from './question-types/numericquestion';
 import RadioQuestion from './question-types/radioquestion';
+import CheckboxQuestion from './question-types/checkboxquestion';
 
 export const Page: React.FC<Page.PageProps> = (props) => {
   //console.log(props.pageQuestions);
@@ -34,6 +35,16 @@ export const Page: React.FC<Page.PageProps> = (props) => {
       case 'radio': 
         pqInputs.push(
           <RadioQuestion 
+            questionData={props.pageQuestions[q]} 
+            currentValue={props.stateInputValues[`${props.pageQuestions[q].stateStorageID}`]}
+            changeHandler={props.inputChangeHandler}
+            key={`pageQuestion-${q}`}
+          />);
+          break;
+
+      case 'checkbox':
+        pqInputs.push(
+          <CheckboxQuestion
             questionData={props.pageQuestions[q]} 
             currentValue={props.stateInputValues[`${props.pageQuestions[q].stateStorageID}`]}
             changeHandler={props.inputChangeHandler}

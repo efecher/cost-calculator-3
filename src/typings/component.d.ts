@@ -11,13 +11,14 @@ interface PageQuestion {
   controlId: string,
   label: string,
   controlType: string,
-  default: string,
+  default?: string,
   text: string,
   min?: string,
   max?: string,
   step?: string,
   stateStorageID: string,
-  options: string[]
+  options: string[],
+  checked?: string
 }
 
 // NOTE: a placeholder for when we don't have a more specific type at the moment

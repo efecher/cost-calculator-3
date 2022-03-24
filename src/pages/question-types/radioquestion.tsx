@@ -18,7 +18,7 @@ export const RadioQuestion: React.FC<QuestionComponentProps>  = (props) => {
               name={qd.controlId} 
               value={option} 
               label={option} 
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {props.changeHandler(e, qd.stateStorageID)}} 
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {props.changeHandler(e, qd.stateStorageID, false)}} 
               checked={props.currentValue === option} 
             />
           })

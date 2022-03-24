@@ -74,62 +74,27 @@ class App extends React.Component<AppProps, AppState> {
 
   inputChangeHandler = (
     e:React.ChangeEvent<HTMLInputElement>, 
-    ssID: string) => {
-    //console.log(`${ssID} :: ${e.currentTarget.value}`);
-    
+    ssID: string, isCheckBox: boolean) => {
+      
+    let value = e.currentTarget.value;
     // NOTE: given the id, update the input value in state
+    // NOTE: if the control is a check box, toggle the true/false representing whether it is checked or not.
+    if(isCheckBox) {
+      if(value === "true") {
+        value = "false";
+      } else {
+        value = "true";
+      }
+    }
+    
     this.setState({
       userInput: {
         ...this.state.userInput,
-        [`${ssID}`]: e.currentTarget.value
+        [`${ssID}`]: value
       }
     });
-
-    /* NOTE: determine if this is a situation like SAT/ACT where user 
-    * can answer the SAT questions, but then not ACT and vice-versa
-    * if so, then if the user enters a value for either SAT input, disable
-    * the ACT and vice-versa for the ACT
-    */
-
-    // NOTE: if there is a value in the input
-    if(parseInt(e.currentTarget.value) > 0) {
-      let _l: LogicOrPage = this.state.questionLogic[this.state.currentPage]; // NOTE: check if this question has logic behind it
-      //console.log(_l);
-      for(let _q of _l.logicORLeft) {
-        if(_q === ssID) {
-          /* NOTE: if the current input is one of the left side, disable the right side
-          * of the 'or' 
-          */
-          for(let r of _l.logicORRight) {
-            (document.querySelector<HTMLInputElement>(`#${r.substring(5)}`))!.disabled = true; // NOTE: the ! is not a typo, it's an assertion to the typescript compiler that the condition is true and there's always expected to be the item in question available in the DOM, to prevent a compilation error. If the item isn't there, there's something wrong anyway.
-          }
-        }
-      }
-
-      for(let _q of _l.logicORRight) {
-        if(_q === ssID) {
-          /* NOTE: if the current input is one of the left side, disable the right side
-          * of the 'or' 
-          */
-          for(let r of _l.logicORLeft) {
-            //console.log(r);
-            (document.querySelector<HTMLInputElement>(`#${r.substring(5)}`))!.disabled = true;
-          }
-        }
-        break;
-      }
-    } else {
-      let _l: LogicOrPage = this.state.questionLogic[this.state.currentPage];
-      for(let _ssID of _l.logicORLeft) {
-        (document.querySelector<HTMLInputElement>(`#${_ssID.substring(5)}`))!.disabled = false;
-      }
-      for(let _ssID of _l.logicORRight) {
-        (document.querySelector<HTMLInputElement>(`#${_ssID.substring(5)}`))!.disabled = false;
-      }
-    }
-    return; 
   }
-
+    
   jumpBackToPageHandler = (pageNum: number) => {
     this.setState({
       currentPage: pageNum

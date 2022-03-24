@@ -62,7 +62,19 @@
         "stateStorageID": "form-current-gpa"
       }
     ],
-    [{
+    [
+      {
+        "checked": "true",
+        "controlId": "use-test-scores",
+        "label": "Use Test Scores",
+        "controlType": "checkbox",
+        "default": "true",
+        "text": "Should we use the test score method to calculate? If this is unchecked, any test scores entered in the next two boxes will be ignored for calculation and the GPA/Merit method will be used. ",
+        "options": [
+        ],
+        "stateStorageID": "form-use-test-scores"
+      },
+      {
         "controlId": "sat",
         "label": "SAT",
         "controlType": "number",

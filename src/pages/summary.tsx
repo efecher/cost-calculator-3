@@ -44,13 +44,11 @@ export default function Summary(props: SummaryProps) {
     : "transfer";
 
   const meritMode = () => {
-    // NOTE:  if both ACT and SAT are 0, we aren't using test scores, use the GPA "test-optional" method instead
-    if(Number(props.calculationData['form-sat']) === 0) {
-      if(Number(props.calculationData['form-act']) === 0) {
-        return "merittestoptional";
-      }
+    // NOTE: If the "Use Test Scores" option was unchecked, then consider any test scores entered as meaningless or user error. Unchecked => use the GPA "test optional" method
+    if(props.calculationData['form-use-test-scores'] === "true") {
+      return "merittestoptional";
     }
-    // NOTE: either one of SAT or ACT have a non-zero value.
+    // NOTE: If the "Use Test Scores" option was checked, then use the table with test scores to calculate
     return "meritwithtest";    
   };
 
