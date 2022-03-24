@@ -4,11 +4,11 @@ import PageData from './questions/question-bank.json';
 import QuestionLogic from './questions/question-logic.json';
 import Page from './pages/page';
 import Summary from './pages/summary';
-import { Container, Row, Col } from 'react-bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css';
+//import { Container, Row, Col } from 'react-bootstrap'
+//import 'bootstrap/dist/css/bootstrap.min.css';
 import { prop } from './util/util'; 
 import PageIndicator from './page-indicator';
-import './App.css';
+//import './App.css';
 
 // NOTE: UI components are from react-bootstrap package https://react-bootstrap.github.io/
 
@@ -62,7 +62,7 @@ class App extends React.Component<AppProps, AppState> {
   }
 
   pageSubmitHandler = (e:React.MouseEvent<HTMLButtonElement>) => {
-    
+    e.preventDefault();
     let _cp: number = this.state.currentPage + 1;
     this.setState({
       currentPage: _cp,
@@ -147,10 +147,10 @@ class App extends React.Component<AppProps, AppState> {
         // NOTE: in JSX you can only output one 'root' element for all the content, so rather than use a <div>, use <> which is equivalent to <React.Fragment>
         return (
           <>
-            <Container>
+            <div className="grid-container">
               <h2 className="text-center">Net Cost Calculator</h2>
-              <Row>
-                <Col md={12}>
+              <div className="grid-x grid margin-x">
+                <div className="cell medium-12">
                   <PageIndicator pageClickHandler={this.jumpBackToPageHandler} currentPage={this.state.currentPage} numberOfPages={this.state.pages.length} />
                   <Page 
                     pageQuestions={this.state.pages[this.state.currentPage]} 
@@ -158,9 +158,9 @@ class App extends React.Component<AppProps, AppState> {
                     stateInputValues={this.state.userInput} 
                     inputChangeHandler={this.inputChangeHandler}  
                   />
-                </Col>
-              </Row>
-            </Container>
+                </div>
+              </div>
+            </div>
           </>
         );
       } else {
