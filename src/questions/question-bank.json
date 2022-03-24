@@ -75,28 +75,25 @@
         "stateStorageID": "form-use-test-scores"
       },
       {
-        "controlId": "sat",
-        "label": "SAT",
+        "controlId": "which-test",
+        "label": "Which test to use",
+        "controlType": "radio",
+        "text": "Which test score to use? ",
+        "options": ["SAT", "ACT"],
+        "default": "SAT",
+        "stateStorageID": "form-which-test"
+      },
+      {
+        "controlId": "test-score",
+        "label": "Test Score",
         "controlType": "number",
-        "text": "What was your Combined SAT (Math + Writing) score? Leave as \u20180\u2018 if not applicable.",
+        "text": "For SAT, use your combined score (400-1600 scale), for ACT use the 1-36 scale.",
         "min": "0",
         "max": "1600",
         "default": "0",
         "step": "1",
         "options": [],
-        "stateStorageID": "form-sat"
-      },
-      {
-        "controlId": "act",
-        "label": "ACT",
-        "controlType": "number",
-        "text": "What was your ACT score? Leave as \u20180\u2018 if not applicable.",
-        "min": "0",
-        "max": "36",
-        "default": "0",
-        "step": "1",
-        "options": [],
-        "stateStorageID": "form-act"
+        "stateStorageID": "form-test-score"
       }
     ],
     [{
