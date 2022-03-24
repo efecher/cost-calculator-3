@@ -45,7 +45,7 @@ export default function Summary(props: SummaryProps) {
 
   const meritMode = () => {
     // NOTE: If the "Use Test Scores" option was unchecked, then consider any test scores entered as meaningless or user error. Unchecked => use the GPA "test optional" method
-    if(props.calculationData['form-use-test-scores'] === "true") {
+    if(props.calculationData['form-use-test-scores'] === "false") {
       return "merittestoptional";
     }
     // NOTE: If the "Use Test Scores" option was checked, then use the table with test scores to calculate
@@ -78,7 +78,7 @@ export default function Summary(props: SummaryProps) {
       Util.determineMeritTable(freshmanOrTransfer, meritMode())
     }/`
   );
-  //console.log(`Merit URL: ${meritURL}`);
+  console.log(`Merit URL: ${meritURL}`);
   // NOTE:  Pell and TAG are constant and don't have variations. TAG is only available to NJ residents.
   const pellURL: string = '/rest/data/costcalculator/get/pell';
 
@@ -106,7 +106,8 @@ export default function Summary(props: SummaryProps) {
             json.data, 
             Number(props.calculationData['form-current-gpa']), freshmanOrTransfer, 
             Number(props.calculationData['form-sat']), 
-            Number(props.calculationData['form-act'])
+            Number(props.calculationData['form-act']),
+            (props.calculationData['form-use-test-scores'] === "true")? true : false
           ) || 0;
           return merit;
         })

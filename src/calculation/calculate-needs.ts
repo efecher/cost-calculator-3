@@ -10,9 +10,9 @@ export default function calculateNeeds(
   let row: number[] = [];
   let result: number = 0;
 
-  console.log(`EFC: ${efc}`);
-  console.log(`GPA: ${gpa}`);
-  console.log(`Student Status: ${studentStatus}`);
+  // console.log(`EFC: ${efc}`);
+  // console.log(`GPA: ${gpa}`);
+  // console.log(`Student Status: ${studentStatus}`);
 
   if(studentStatus === "transfer") {
     for(let r of matrix) {
@@ -37,17 +37,17 @@ export default function calculateNeeds(
     console.log("result");
   } else {
     // NOTE:  freshman
-    console.log("FRESHMAN!");
+    //console.log("FRESHMAN!");
     for(let r of matrix) {
       if(efc >= r[0]) {
         if(efc <= r[1]) {
           result = r[2];
-          console.log(r);
+          //console.log(r);
           break;
         }
       } 
     }
-    console.log(result);
+    //console.log(result);
   }
   return result;
 } 

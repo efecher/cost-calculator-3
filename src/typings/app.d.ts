@@ -5,12 +5,6 @@ interface AppState {
   furthestPage: number,
   pages: PageQuestion[][],
   userInput: {[key: string]: string},
-  questionLogic: LogicOrPage[]
-}
-
-interface LogicOrPage {
-  logicORLeft: string[],
-  logicORRight: string[]
 }
 
 interface SummaryProps {

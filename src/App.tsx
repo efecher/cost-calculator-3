@@ -1,7 +1,7 @@
 ///<reference path="./typings/app.d.ts" />
 import React from 'react';
 import PageData from './questions/question-bank.json';
-import QuestionLogic from './questions/question-logic.json';
+//import QuestionLogic from './questions/question-logic.json';
 import Page from './pages/page';
 import Summary from './pages/summary';
 import { Container, Row, Col } from 'react-bootstrap'
@@ -20,7 +20,7 @@ class App extends React.Component<AppProps, AppState> {
       currentPage: 0, // NOTE: Experimental, for the pagination
       furthestPage: 0, // NOTE: Pagination
       pages: PageData.PageData, // NOTE: page data
-      questionLogic: QuestionLogic.QuestionLogic, // NOTE: Question logic, "either/or", etc
+      //questionLogic: QuestionLogic.QuestionLogic, // NOTE: Question logic, "either/or", etc
       userInput: {}, // NOTE: as user progresses thru app, will collect their responses
       //disclaimerAccepted: false, // NOTE: flag that allows rest of app to progress once user accepts the disclaimer
     }  
