@@ -105,8 +105,8 @@ export default function Summary(props: SummaryProps) {
           let merit: number = calculateMerit(
             json.data, 
             Number(props.calculationData['form-current-gpa']), freshmanOrTransfer, 
-            Number(props.calculationData['form-sat']), 
-            Number(props.calculationData['form-act']),
+            Number(props.calculationData['form-test-score']), 
+            props.calculationData['form-which-test'],
             (props.calculationData['form-use-test-scores'] === "true")? true : false
           ) || 0;
           return merit;
