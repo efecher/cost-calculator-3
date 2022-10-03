@@ -1,5 +1,5 @@
 ///<reference path="./typings/app.d.ts" />
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PageData from './questions/question-bank.json';
 //import QuestionLogic from './questions/question-logic.json';
 import Page from './pages/page';
@@ -21,24 +21,29 @@ export default function App(props: AppProps) {
     userInput: {}
   });
 
+  const initialStateSet = useRef<boolean>(false);
+
     
 
   useEffect(() => {
-    let _ssidKeys: LooseObject = {};
-    for(let p of appState.pages) {
-      for(let q in p) {
-        _ssidKeys = {
-          ..._ssidKeys, // NOTE: we are creating a "new state" by including what was there and adding a new property, prevent mutation
-          [`${p[q].stateStorageID}`]: prop(p[q], "default")  // NOTE: using "array notation" to create a new property
+    if(!initialStateSet.current) {
+      let _ssidKeys: LooseObject = {};
+      for(let p of appState.pages) {
+        for(let q in p) {
+          _ssidKeys = {
+            ..._ssidKeys, // NOTE: we are creating a "new state" by including what was there and adding a new property, prevent mutation
+            [`${p[q].stateStorageID}`]: prop(p[q], "default")  // NOTE: using "array notation" to create a new property
+          }
         }
       }
-    }
 
-    setAppState({
-      ...appState,
-      userInput: _ssidKeys
-    });
-  },[appState.pages]);
+      initialStateSet.current = true;
+      setAppState({
+        ...appState,
+        userInput: _ssidKeys
+      });
+    }
+  }, [appState]);
 
   const resetHandler = () => {
     let _ssidKeys: LooseObject = {};

@@ -15,7 +15,7 @@ export const CheckboxQuestion: React.FC<QuestionComponentProps>  = (props) => {
             type="checkbox"
             label={qd.label}
             id={qd.label}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {console.log(e); props.changeHandler(e, qd.stateStorageID, true)}} 
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { props.changeHandler(e, qd.stateStorageID, true)}} 
             value={props.currentValue}
             checked={(props.currentValue === "true")? true : false}
           />
