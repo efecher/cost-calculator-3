@@ -7,8 +7,8 @@ import Summary from './pages/summary';
 import { Container, Row, Col } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { prop } from './util/util'; 
-import PageIndicator from './page-indicator';
-import './App.css';
+//import PageIndicator from './page-indicator';
+import './App.scss';
 
 // NOTE: UI components are from react-bootstrap package https://react-bootstrap.github.io/
 
@@ -22,8 +22,6 @@ export default function App(props: AppProps) {
   });
 
   const initialStateSet = useRef<boolean>(false);
-
-    
 
   useEffect(() => {
     if(!initialStateSet.current) {
@@ -114,11 +112,14 @@ export default function App(props: AppProps) {
     if(Object.keys(appState.userInput).length > 0) {
       return (
         <>
-          <Container>
-            <h2 className="text-center">Net Cost Calculator</h2>
+          <Container className="ncc-container">
+            <Row className="ncc-row ncc-title-row">
+              <Col md={12}>
+                <h2 className="text-center">Net Cost Calculator</h2>
+              </Col>
+            </Row>
             <Row>
               <Col md={12}>
-                <PageIndicator pageClickHandler={jumpBackToPageHandler} currentPage={appState.currentPage} numberOfPages={appState.pages.length} />
                 <Page 
                   pageQuestions={appState.pages[appState.currentPage]} 
                   submitPageHandler={pageSubmitHandler}

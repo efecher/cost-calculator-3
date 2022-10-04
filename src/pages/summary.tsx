@@ -7,7 +7,8 @@ import determineDependency from '../calculation/dependency';
 import calculateMerit from '../calculation/calculate-merit';
 import calculateTAG from '../calculation/calculate-tag';
 import calculatePell from '../calculation/calculate-pell';
-
+import { Container, Row, Col } from 'react-bootstrap';
+import '../App.scss';
 
 export default function Summary(props: SummaryProps) {
   const [report, setReport] = useState<Report>({
@@ -171,12 +172,63 @@ export default function Summary(props: SummaryProps) {
   
   // NOTE: Component Output
   return (
-    <ul>
-      <li><strong>EFC:</strong> {report.efcValue}</li>
-      <li><strong>Merit: </strong> {report.merit}</li>
-      <li><strong>Needs:</strong> {report.needs}</li>
-      <li><strong>Pell:</strong> {report.pell}</li>
-      <li><strong>TAG:</strong> {report.tag}</li>
-    </ul>
+    <>
+    {/*<div>
+      <ul>
+        <li><strong>EFC:</strong> {report.efcValue}</li>
+        <li><strong>Merit: </strong> {report.merit}</li>
+        <li><strong>Needs:</strong> {report.needs}</li>
+        <li><strong>Pell:</strong> {report.pell}</li>
+        <li><strong>TAG:</strong> {report.tag}</li>
+      </ul>
+  </div>*/}
+    <Container className="ncc-container">
+      <Row className="ncc-row ncc-page">
+        <Col md={12}>
+          <h1>Summary</h1>
+          <p>
+            Based on the information you have provided, the following clculations represent the average net price of attendance that students in similar situations have paid recently.<br />
+            <small>Academic Year: 2019-2020</small>
+          </p>
+          <hr />
+          <ul>
+            <li>
+              <strong>Estimated Total Direct Cost: </strong>$
+              <ul>
+                <li><em>Estimated Tuition and Fees: </em> $</li>
+                <li><em>Estimated Room and Board: </em>$</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Estimated Total Grant Amount: </strong>$
+              <br /><em>(Includes both merit and needs-based aid from all sources - federal, state and institutional)</em>
+            </li>
+            <li>
+              <strong>Estimated Net Price: </strong>$
+              <br /><em>(Direct Cost minus Grant Aid)</em>
+            </li>
+          </ul>
+        </Col>
+      </Row>
+      <hr />
+      <Row className="ncc-row ncc-page">
+        <Col md={12}>
+          <p>
+            <em>In addition to direct costs, you should plan to cover any additional indirect costs. Here are some approximate costs you should be aware of:</em>
+            <ul>
+              <li>Books and Supplies: $1000</li>
+              <li>Other Expenses: $2200</li>
+              <li>Room and Board (off-campus): $6000</li>
+            </ul>
+          </p>
+          <p>
+          Please Note: The estimates above apply to full-time, first-time degree/certificate-seeking undergraduate students only. This estimate is based on an expected family contribution (EFC) of <strong>$XXXX</strong>. Your actual EFC will be determined each year by filing the FAFSA.<br />
+          These estimates do not represent a final determination, or actual award, of financial assistance or a final net price; they are only estimates based on price of attendance and financial aid provided to students in 2019-2020. Price of attendance and financial aid availability change year to year. These estimates shall not be binding on the Secretary of Education, the institution of higher education, or the State.<br />
+          Not all students receive financial aid. In 2019-2020, 92% of our full-time students enrolling for college for the first time received grant/scholarship aid. Students may also be eligible for student loans and work-study. Students must complete the Free Application for Federal Student Aid (FAFSA) in order to determine their eligibility for Federal financial aid that includes Federal grant, loan, or work-study assistance. For more information on applying for Federal student aid, go to studentaid.gov.
+          </p>
+        </Col>
+      </Row>
+    </Container>
+    </>
   ); 
 }

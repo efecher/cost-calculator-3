@@ -7,7 +7,7 @@ import { Col }  from 'react-bootstrap';
 export const RadioQuestion: React.FC<QuestionComponentProps>  = (props) => {
   let qd: PageQuestion = props.questionData;
   return (
-    <Col md={4}>
+    <Col md={4} className="ncc-question">
       <Form.Group controlId={qd.controlId}>
         <Form.Label>{qd.label}</Form.Label>
         { 

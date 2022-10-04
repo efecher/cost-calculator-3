@@ -1,0 +1,42 @@
+.ncc-row, .ncc-container {
+  background-color: #004488;
+  &.ncc-title-row {
+    border-bottom: 1px solid #ffffff;
+  }
+}
+
+.ncc-question {
+  background-color: #004488;
+  padding: 3rem;
+}
+
+.ncc-page-button {
+  padding: 0 2rem;
+}
+
+.ncc-page {
+  margin-bottom: 5vh;
+}
+
+.form-label, 
+label, 
+p, 
+h1, h2, h3, h4, h5, h6,
+li {
+  color: #ffffff;
+}
+
+small {
+  &.form-text {
+    color: #ffffff;
+  }
+}
+
+button {
+  &.btn-ghost {
+    background-color: transparent;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    margin-bottom: 1.3rem;
+  }
+}

@@ -8,7 +8,7 @@ export const NumericQuestion: React.FC<QuestionComponentProps>  = (props) => {
   let qd: PageQuestion = props.questionData;
   //console.log(props.currentValue);
   return (
-    <Col md={4}>
+    <Col md={4} className="ncc-question">
       <Form.Group as={Row} controlId={qd.controlId}>
         <Col md={6}>
           <Form.Label>{qd.label}</Form.Label> 

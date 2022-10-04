@@ -60,15 +60,14 @@ export const Page: React.FC<Page.PageProps> = (props) => {
 
   return (
     <Form>
-      <Container>
-        <Row>
+      <Container className="ncc-page">
+        <Row className="ncc-row">
           {pqInputs}
         </Row>
       </Container>
-      <hr />
-      <Row>
-        <Col md={{span: 4, offset: 3}}>
-          <Button variant="success"
+      <Row className="ncc-page-button">
+        <Col md={{span: 2, offset: 11}}>
+          <Button className="btn btn-ghost"
             onClick={(e:React.MouseEvent<HTMLButtonElement>) => {props.submitPageHandler(e)}}
           >
             Continue »
