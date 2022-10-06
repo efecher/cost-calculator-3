@@ -39,8 +39,8 @@ interface CalculationData {
 
 interface Report {
   efcValue: number,
-  needs: number | null,
-  merit: number | null,
-  tag: number | null,
-  pell: number | null
+  needs: number,
+  merit: number,
+  tag: number,
+  pell: number
 }

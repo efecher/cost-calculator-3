@@ -13,10 +13,10 @@ import '../App.scss';
 export default function Summary(props: SummaryProps) {
   const [report, setReport] = useState<Report>({
     efcValue: 0,
-    needs: null,
-    merit: null,
-    tag: null,
-    pell: null
+    needs: 0,
+    merit: 0,
+    tag: 0,
+    pell: 0
   });
   
   // NOTE:  reference to persist this value between renders. We use this to signal when we have fully retrieved and calculated the individual values so useEffect doesn't trigger an infinite loop from state updates. React will refresh a component when state is updated so that would also include these values if they were conventional variables, resulting in an endless loop of fetches. useRef perpetuates the state of these variables through refresh so we don't lose their values. 
@@ -187,13 +187,14 @@ export default function Summary(props: SummaryProps) {
         <Col md={12}>
           <h1>Summary</h1>
           <p>
-            Based on the information you have provided, the following clculations represent the average net price of attendance that students in similar situations have paid recently.<br />
+            Based on the information you have provided, the following calculations represent the average net price of attendance that students in similar situations have paid recently.<br />
             <small>Academic Year: 2019-2020</small>
           </p>
           <hr />
           <ul>
             <li>
               <strong>Estimated Total Direct Cost: </strong>$
+              {(report.tag + report.pell + report.needs+ report.merit).toLocaleString("en-US")}
               <ul>
                 <li><em>Estimated Tuition and Fees: </em> $</li>
                 <li><em>Estimated Room and Board: </em>$</li>
@@ -222,7 +223,7 @@ export default function Summary(props: SummaryProps) {
             </ul>
           </p>
           <p>
-          Please Note: The estimates above apply to full-time, first-time degree/certificate-seeking undergraduate students only. This estimate is based on an expected family contribution (EFC) of <strong>$XXXX</strong>. Your actual EFC will be determined each year by filing the FAFSA.<br />
+          Please Note: The estimates above apply to full-time, first-time degree/certificate-seeking undergraduate students only. This estimate is based on an expected family contribution (EFC) of <strong>${report.efcValue}</strong>. Your actual EFC will be determined each year by filing the FAFSA.<br />
           These estimates do not represent a final determination, or actual award, of financial assistance or a final net price; they are only estimates based on price of attendance and financial aid provided to students in 2019-2020. Price of attendance and financial aid availability change year to year. These estimates shall not be binding on the Secretary of Education, the institution of higher education, or the State.<br />
           Not all students receive financial aid. In 2019-2020, 92% of our full-time students enrolling for college for the first time received grant/scholarship aid. Students may also be eligible for student loans and work-study. Students must complete the Free Application for Federal Student Aid (FAFSA) in order to determine their eligibility for Federal financial aid that includes Federal grant, loan, or work-study assistance. For more information on applying for Federal student aid, go to studentaid.gov.
           </p>
