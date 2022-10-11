@@ -7,7 +7,8 @@ import determineDependency from '../calculation/dependency';
 import calculateMerit from '../calculation/calculate-merit';
 import calculateTAG from '../calculation/calculate-tag';
 import calculatePell from '../calculation/calculate-pell';
-import { Container, Row, Col } from 'react-bootstrap';
+import calculatePOA from '../calculation/calculate-poa';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import '../App.scss';
 
 export default function Summary(props: SummaryProps) {
@@ -16,7 +17,8 @@ export default function Summary(props: SummaryProps) {
     needs: 0,
     merit: 0,
     tag: 0,
-    pell: 0
+    pell: 0,
+    poa: [0,0,0]
   });
   
   // NOTE:  reference to persist this value between renders. We use this to signal when we have fully retrieved and calculated the individual values so useEffect doesn't trigger an infinite loop from state updates. React will refresh a component when state is updated so that would also include these values if they were conventional variables, resulting in an endless loop of fetches. useRef perpetuates the state of these variables through refresh so we don't lose their values. 
@@ -79,11 +81,13 @@ export default function Summary(props: SummaryProps) {
       Util.determineMeritTable(freshmanOrTransfer, meritMode())
     }/`
   );
-  console.log(`Merit URL: ${meritURL}`);
+  
   // NOTE:  Pell and TAG are constant and don't have variations. TAG is only available to NJ residents.
   const pellURL: string = '/rest/data/costcalculator/get/pell';
 
   const tagURL: string = '/rest/data/costcalculator/get/tag/';
+
+  const poaURL: string = '/rest/data/costcalculator/get/tuitionandfees';
   
   // NOTE:  obtain EFC value, which many other things depend on.
   useEffect(() => {
@@ -139,6 +143,16 @@ export default function Summary(props: SummaryProps) {
         return needs;
       }),
 
+      fetchData(poaURL)
+      .then(json => {
+        let poa: number[] = calculatePOA(
+          json.data,
+          props.calculationData['form-planned-residence']
+        ) || [0,0,0];
+
+        return poa;
+      }),
+
       fetchData(tagURL)
       .then(json => {
         let tag: number = calculateTAG(
@@ -159,13 +173,14 @@ export default function Summary(props: SummaryProps) {
         return pell;
       })
     ])
-    .then(([needs, tag, pell]) => {
+    .then(([needs, poa, tag, pell]) => {
       efcDependentValuesRetrieved.current = true;
       setReport({
         ...report,
         needs: needs,
         tag: tag,
-        pell: pell
+        pell: pell,
+        poa: poa
       });
     });
   }
@@ -191,42 +206,64 @@ export default function Summary(props: SummaryProps) {
             <small>Academic Year: 2019-2020</small>
           </p>
           <hr />
-          <ul>
-            <li>
-              <strong>Estimated Total Direct Cost: </strong>$
-              {(report.tag + report.pell + report.needs+ report.merit).toLocaleString("en-US")}
-              <ul>
-                <li><em>Estimated Tuition and Fees: </em> $</li>
-                <li><em>Estimated Room and Board: </em>$</li>
-              </ul>
-            </li>
-            <li>
-              <strong>Estimated Total Grant Amount: </strong>$
-              <br /><em>(Includes both merit and needs-based aid from all sources - federal, state and institutional)</em>
-            </li>
-            <li>
-              <strong>Estimated Net Price: </strong>$
-              <br /><em>(Direct Cost minus Grant Aid)</em>
-            </li>
-          </ul>
+          <table summary="Estimated costs" className="ncc-table">
+            <tbody>
+              <tr>
+                <th scope="row">Estimated Total Direct Cost: </th>
+                <td className="ncc-major-costs">${report.poa[0].toLocaleString("en-US")}</td>
+              </tr>
+              <tr>
+                <th scope="row">Estimated Tuition and Fees: </th> 
+                <td className="ncc-major-costs">${report.poa[1].toLocaleString("en-US")}</td>
+              </tr>
+              <tr>
+                <th scope="row">Estimated Room and Board: </th>
+                <td className="ncc-major-costs">${report.poa[2].toLocaleString("en-US")}</td>
+              </tr>
+            </tbody>
+          </table>
+          <table summary="Estimated Grant" className="ncc-table">
+            <tbody>
+              <tr>
+                <th scope="row">
+                  Estimated Total Grant Amount <br /> 
+                  <em>Includes both merit and needs-based aid <br />
+                  from all sources - federal, state and institutional</em>: 
+                </th>
+                <td className="ncc-major-costs">${(report.tag + report.pell + report.needs + report.merit).toLocaleString("en-US")}</td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  Estimated Net Price to Attend<br />
+                  <em>Direct Cost minus Grant Aid</em>: 
+                </th>
+                <td className="ncc-major-costs final-total">${(report.poa[0] - (report.tag + report.pell + report.needs + report.merit)).toLocaleString("en-US")}</td>
+              </tr>
+            </tbody>
+          </table>
         </Col>
       </Row>
       <hr />
       <Row className="ncc-row ncc-page">
         <Col md={12}>
-          <p>
+          <p className="ncc-summary-p">
             <em>In addition to direct costs, you should plan to cover any additional indirect costs. Here are some approximate costs you should be aware of:</em>
-            <ul>
-              <li>Books and Supplies: $1000</li>
-              <li>Other Expenses: $2200</li>
-              <li>Room and Board (off-campus): $6000</li>
-            </ul>
           </p>
-          <p>
-          Please Note: The estimates above apply to full-time, first-time degree/certificate-seeking undergraduate students only. This estimate is based on an expected family contribution (EFC) of <strong>${report.efcValue}</strong>. Your actual EFC will be determined each year by filing the FAFSA.<br />
+          <ul className="list-unstyled ncc-summary-p">
+            <li><strong>Books and Supplies: $1000</strong></li>
+            <li><strong>Other Expenses: $2200</strong></li>
+            <li><strong>Room and Board (off-campus): $6000</strong></li>
+          </ul>
+          <p className="ncc-summary-p">
+          Please Note: The estimates above apply to full-time, first-time degree/certificate-seeking undergraduate students only. This estimate is based on an expected family contribution (EFC) of <strong><span className="typography-underline">${report.efcValue}</span></strong>. Your actual EFC will be determined each year by filing the FAFSA.<br />
           These estimates do not represent a final determination, or actual award, of financial assistance or a final net price; they are only estimates based on price of attendance and financial aid provided to students in 2019-2020. Price of attendance and financial aid availability change year to year. These estimates shall not be binding on the Secretary of Education, the institution of higher education, or the State.<br />
           Not all students receive financial aid. In 2019-2020, 92% of our full-time students enrolling for college for the first time received grant/scholarship aid. Students may also be eligible for student loans and work-study. Students must complete the Free Application for Federal Student Aid (FAFSA) in order to determine their eligibility for Federal financial aid that includes Federal grant, loan, or work-study assistance. For more information on applying for Federal student aid, go to studentaid.gov.
           </p>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Button>Start Over</Button>
         </Col>
       </Row>
     </Container>

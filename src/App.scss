@@ -40,3 +40,38 @@ button {
     margin-bottom: 1.3rem;
   }
 }
+
+.ncc-summary-p {
+  width: 60rem;
+  margin: 4vh auto;
+}
+
+.typography-underline {
+  text-decoration: underline;
+}
+
+.ncc-table {
+  color: #ffffff;
+  margin-bottom: 3vh;
+  tr {
+    th {
+      border-bottom: 1px solid #ffffff;
+      &, td {
+        padding: 1rem;
+      }
+    }
+
+    td {
+      font-weight: bold;
+      padding-left: 2rem;
+
+      &.ncc-major-costs { 
+        font-size: 1.25rem;  
+
+        &.final-total {
+          font-size: 1.5rem;
+        }
+      } 
+    }
+  }
+}

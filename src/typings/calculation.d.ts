@@ -42,5 +42,6 @@ interface Report {
   needs: number,
   merit: number,
   tag: number,
-  pell: number
+  pell: number,
+  poa: number[]
 }
