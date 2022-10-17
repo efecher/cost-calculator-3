@@ -10,6 +10,8 @@ import calculatePell from '../calculation/calculate-pell';
 import calculatePOA from '../calculation/calculate-poa';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import '../App.scss';
+import * as queryString from 'query-string';
+import { prop } from '../util/util';
 
 export default function Summary(props: SummaryProps) {
   const [report, setReport] = useState<Report>({
@@ -185,18 +187,23 @@ export default function Summary(props: SummaryProps) {
     });
   }
   
+  let qs:queryString.ParsedQuery = queryString.parse(window.location.search);
+
+  const dumpData = () => {
+    console.log(`========User Input Data========`);
+    console.table(props.calculationData);
+    console.log(`========Calculated Data========`);
+    console.table(report);
+  }
+
   // NOTE: Component Output
   return (
     <>
-    {/*<div>
-      <ul>
-        <li><strong>EFC:</strong> {report.efcValue}</li>
-        <li><strong>Merit: </strong> {report.merit}</li>
-        <li><strong>Needs:</strong> {report.needs}</li>
-        <li><strong>Pell:</strong> {report.pell}</li>
-        <li><strong>TAG:</strong> {report.tag}</li>
-      </ul>
-  </div>*/}
+    {
+      (qs.debug)? 
+      dumpData() 
+      : null
+    }
     <Container className="ncc-container">
       <Row className="ncc-row ncc-page">
         <Col md={12}>
@@ -263,7 +270,7 @@ export default function Summary(props: SummaryProps) {
       </Row>
       <Row>
         <Col>
-          <Button>Start Over</Button>
+          <Button onClick={props.resetHandler}>Start Over</Button>
         </Col>
       </Row>
     </Container>
