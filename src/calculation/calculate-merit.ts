@@ -1,45 +1,58 @@
 export default function calculateMerit(
+  freshmanOrTransfer: string,
   matrix: number[][],
   gpa: number,
-  studentStatus: string,
   testScore: number,
   whichTest: string,
-  testOptional: boolean
+  useTest: boolean
 ) {
   let result: number = 0;
+  console.log(...arguments)
 
-  // console.log(testOptional);
-  // console.log(`Test Score: ${testScore}`);
-  // console.log(`Which Test: ${whichTest}`);
-  // console.log(`GPA: ${gpa}`);
-  
-  // TODO: Determine if we are using test scores, then determine which one if we are using the test score method, otherwise use the test optional method. 
-  if (!testOptional) {
-    // NOTE:  We are using test scores to determine, the date matrix provided should be the "Matrix with test scores"
-    if(whichTest === "ACT") {
-      // NOTE:  We are using ACT test scores
+  // NOTE:  There is a different matrix depending on if we are using a test-optional calculation. Both methods take into account GPA, but "With Test Scores" uses both the GPA AND Either the ACT or SAT score to determine value
+
+  // NOTE:  High School of Transfer? 
+  if(freshmanOrTransfer === "freshman") {
+    // NOTE:  this is a high school student. ACT/SAT or GPA
+    if(!useTest) {
+      // NOTE:  using GPA-only alternative to calculate (3 column matrix)
       for(let row of matrix) {
-        if(testScore >= row[4] && testScore <= row[5]) {
-          result = row[6];
+        if(gpa >= row[0] && gpa <= row[1]){
+          result = row[2];
         }
       }
     } else {
-      // NOTE:  We are using SAT scores
-      for(let row of matrix) {
-        if(testScore >= row[2] && testScore <= row[3]) {
-          result = row[6];
+      // NOTE:  using either ACT or SAT score to calculate (GPA AND ACT/SAT values needed for lookup in 7-column matrix)
+      if(whichTest === "SAT") {
+        // NOTE:  use SAT
+        for(let row of matrix){
+          if(
+            (gpa >= row[0] && gpa <= row[1]) &&
+            (testScore >= row[2] && testScore <= row[3])
+          ){
+            result = row[6];
+          }
+        }
+      } else {
+        // NOTE:  use ACT
+        for(let row of matrix){
+          if(
+            (gpa >= row[0] && gpa <= row[1]) &&
+            (testScore >= row[0] && testScore <= row[1])
+          ){
+            result = row[6];
+          }
         }
       }
     }
   } else {
-    // NOTE:  We are using the GPA method to determine
+    // NOTE: This is a Transfer student, only go by GPA
     for(let row of matrix) {
-      if(gpa >= row[0] && gpa <= row[1]) {
+      if(gpa >= row[0] && gpa <= row[1]){
         result = row[6];
       }
     }
   }
-    
 
   return result;
 }

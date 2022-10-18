@@ -110,8 +110,9 @@ export default function Summary(props: SummaryProps) {
         fetchData(meritURL)
         .then(json => {
           let merit: number = calculateMerit(
+            freshmanOrTransfer,
             json.data, 
-            Number(props.calculationData['form-current-gpa']), freshmanOrTransfer, 
+            Number(props.calculationData['form-current-gpa']),  
             Number(props.calculationData['form-test-score']), 
             props.calculationData['form-which-test'],
             (props.calculationData['form-use-test-scores'] === "true")? true : false
