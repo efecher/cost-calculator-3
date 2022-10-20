@@ -8,17 +8,18 @@ namespace Page {
 }
 
 interface PageQuestion {
+  checked?: string,
   controlId: string,
-  label: string,
   controlType: string,
   default?: string,
-  text: string,
-  min?: string,
+  label: string,
   max?: string,
-  step?: string,
-  stateStorageID: string,
+  min?: string,
   options: string[],
-  checked?: string
+  stateStorageID: string,
+  step?: string,
+  text: string,
+  visibleIf: string
 }
 
 // NOTE: a placeholder for when we don't have a more specific type at the moment

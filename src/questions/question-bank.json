@@ -2,130 +2,139 @@
   "PageData": [
     [{
         "controlId": "student-age",
-        "label": "Student Age",
         "controlType": "number",
-        "text": "Please enter your current age.",
-        "min": "17",
         "default": "17",
-        "step": "1",
+        "label": "Student Age",
+        "min": "17",
         "options": [],
-        "stateStorageID": "form-student-age"
+        "stateStorageID": "form-student-age",
+        "step": "1",
+        "text": "Please enter your current age.",
+        "visibleIf": "always"
       },
       {
         "controlId": "planned-residence",
-        "label": "Planned Residency",
         "controlType": "radio",
-        "text": "Where do you plan to reside while attending?",
+        "default": "On-Campus",
+        "label": "Planned Residency",
         "options": [
           "On-Campus",
           "With parents/family",
           "Alone/off-campus/with roommate"
         ],
-        "default": "On-Campus",
-        "stateStorageID": "form-planned-residence"
+        "stateStorageID": "form-planned-residence",
+        "text": "Where do you plan to reside while attending?",
+        "visibleIf": "always" 
       },
       {
         "controlId": "current-residence",
-        "label": "Current Residence",
         "controlType": "radio",
-        "text": "Do you currently reside in New Jersey or another state/territory?",
+        "default": "New Jersey",
+        "label": "Current Residence",
         "options": [
           "New Jersey",
           "Other State/Territory"
         ],
-        "default": "New Jersey",
-        "stateStorageID": "form-current-residence"
+        "stateStorageID": "form-current-residence",
+        "text": "Do you currently reside in New Jersey or another state/territory?",
+        "visibleIf": "always"
       }
     ],
     [{
         "controlId": "highschool-transfer",
-        "label": "High School or Transfer",
         "controlType": "radio",
-        "text": "Will you be a Freshman out of High School, or a Transfer Student?",
+        "default": "High School",
+        "label": "High School or Transfer",
         "options": [
           "High School",
           "Transfer"
         ],
-        "default": "High School",
-        "stateStorageID": "form-highschool-transfer"
+        "stateStorageID": "form-highschool-transfer",
+        "text": "Will you be a Freshman out of High School, or a Transfer Student?",
+        "visibleIf": "{form-student-age} <= 24" 
       },
       {
         "controlId": "current-gpa",
-        "label": "Current GPA",
         "controlType": "number",
-        "text": "What is your current GPA (unweighted, 4.0 scale)?",
-        "min": "0.00",
-        "max": "4.00",
         "default": "0.00",
-        "step": "0.01",
+        "label": "Current GPA",
+        "max": "4.00",
+        "min": "0.00",
         "options": [],
-        "stateStorageID": "form-current-gpa"
+        "stateStorageID": "form-current-gpa",
+        "step": "0.01",
+        "text": "What is your current GPA (unweighted, 4.0 scale)?",
+        "visibleIf": "always" 
       }
     ],
     [
       {
         "checked": "true",
         "controlId": "use-test-scores",
-        "label": "Use Test Scores",
         "controlType": "checkbox",
         "default": "true",
+        "label": "Use Test Scores",
+        "options": [],
+        "stateStorageID": "form-use-test-scores",
         "text": "Should we use the test score method to calculate? If this is unchecked, any test scores entered in the next two boxes will be ignored for calculation and the GPA/Merit method will be used. ",
-        "options": [
-        ],
-        "stateStorageID": "form-use-test-scores"
+        "visibleIf": "{form-student-age} <= 24 || {form-highschool-transfer} !== \"Transfer\""
       },
       {
         "controlId": "which-test",
-        "label": "Which test to use",
         "controlType": "radio",
-        "text": "Which test score to use? ",
-        "options": ["SAT", "ACT"],
         "default": "SAT",
-        "stateStorageID": "form-which-test"
+        "label": "Which test to use",
+        "options": ["SAT", "ACT"],
+        "stateStorageID": "form-which-test",
+        "text": "Which test score to use? ",
+        "visibleIf": "{form-student-age} <= 24 || {form-highschool-transfer} !== \"Transfer\""
       },
       {
         "controlId": "test-score",
-        "label": "Test Score",
         "controlType": "number",
-        "text": "For SAT, use your combined score (400-1600 scale), for ACT use the 1-36 scale.",
-        "min": "0",
-        "max": "1600",
         "default": "0",
-        "step": "1",
+        "label": "Test Score",
+        "max": "1600",
+        "min": "0",
         "options": [],
-        "stateStorageID": "form-test-score"
+        "stateStorageID": "form-test-score",
+        "step": "1",
+        "text": "For SAT, use your combined score (400-1600 scale), for ACT use the 1-36 scale.",
+        "visibleIf": "{form-student-age} <= 24 || {form-highschool-transfer} !== \"Transfer\""
       }
     ],
     [{
         "controlId": "marital-status",
-        "label": "Marital Status",
         "controlType": "radio",
-        "text": "Are you (the student) married?",
+        "default": "No",
+        "label": "Marital Status",
         "options": [
           "No",
           "Yes"
         ],
-        "default": "No",
-        "stateStorageID": "form-marital-status"
+        "stateStorageID": "form-marital-status",
+        "text": "Are you (the student) married?",
+        "visibleIf": "always"
       },
       {
         "controlId": "children",
-        "label": "Children",
         "controlType": "radio",
-        "text": "Are you (the student) the primary source of financial support for any children?",
+        "default": "No",
+        "label": "Children",
         "options": [
           "No",
           "Yes"
         ],
-        "default": "No",
-        "stateStorageID": "form-children"
+        "stateStorageID": "form-children",
+        "text": "Are you (the student) the primary source of financial support for any children?",
+        "visibleIf": "always"
       }
     ],
     [{
         "controlId": "people-in-household",
-        "label": "Household Members",
         "controlType": "radio",
-        "text": "How many people are in your family\u2018s household? (Count yourself, your parent(s), and your parent(s)\u2018 other children who are under the age of 24)",
+        "default": "Two",
+        "label": "Household Members",
         "options": [
           "Two",
           "Three",
@@ -133,27 +142,29 @@
           "Five",
           "Six or more"
         ],
-        "default": "Two",
-        "stateStorageID": "form-people-in-household"
+        "stateStorageID": "form-people-in-household",
+        "text": "How many people are in your family\u2018s household? (Count yourself, your parent(s), and your parent(s)\u2018 other children who are under the age of 24)",
+        "visibleIf": "always"
       },
       {
         "controlId": "number-in-college",
-        "label": "Family in College",
         "controlType": "radio",
-        "text": "Of the number in your family in the previous question, how many will be in college next year? (Count yourself and your siblings, but do not count your parents)",
+        "default": "One Child",
+        "label": "Family in College",
         "options": [
           "One Child",
           "Two Children",
           "Three or more Children"
         ],
-        "default": "One Child",
-        "stateStorageID": "form-people-in-college"
+        "stateStorageID": "form-people-in-college",
+        "text": "Of the number in your family in the previous question, how many will be in college next year? (Count yourself and your siblings, but do not count your parents)",
+        "visibleIf": "always"
       },
       {
         "controlId": "household-income",
-        "label": "Household Income",
         "controlType": "radio",
-        "text": "What is your household income? (Include income earned by yourself and parent(s). Include income from work, child support and other sources. If your parent is single, separated or divorced, include the income for the parent with whom you live. If the parent with whom you live is remarried, include both your parent\u2018s income AND his.her spouse\u2018s income.",
+        "default": "Less than $30,000",
+        "label": "Household Income",
         "options": [
           "Less than $30,000",
           "$30,000 - $39,999",
@@ -165,8 +176,9 @@
           "$90,000 - $99,999",
           "$100,000 or above"
         ],
-        "default": "Less than $30,000",
-        "stateStorageID": "form-household-income"
+        "stateStorageID": "form-household-income",
+        "text": "What is your household income? (Include income earned by yourself and parent(s). Include income from work, child support and other sources. If your parent is single, separated or divorced, include the income for the parent with whom you live. If the parent with whom you live is remarried, include both your parent\u2018s income AND his.her spouse\u2018s income.",
+        "visibleIf": "always"
       }
     ]
   ]

@@ -5,7 +5,7 @@ export default function calculatePOA(
 
   // NOTE:  Holds the values pulled from the tuition breakdown data (Total tuition, room & board, fees, books, etc)
   let returnValues: number[] = [];
-
+  console.log(matrix);
   // NOTE:  Total tuition and "room and board" value
   switch(livingSituation) {
     case "Alone/off-campus/with roommate": 
