@@ -65,6 +65,8 @@ export default function App(props: AppProps) {
   const pageSubmitHandler = () => {
     
     let _cp: number = appState.currentPage + 1;
+
+    // TODO:  check if the next page's logic eliminates all that page's questions from view (ex: the 3 questions about test scores), if all questions on the page are set not to show based on the logic and previous-question input, auto-increment to the next page.
     setAppState({
       ...appState,
       currentPage: _cp,
