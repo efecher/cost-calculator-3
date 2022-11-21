@@ -5,20 +5,11 @@ export default function determineDependency(
   age: number, 
   childSupport: boolean, 
   married: boolean
-)
-  : string {
+): string {
     
-  let dependency = "";
-
   if((age <= 24) || !married) {
-    dependency = "efcdependent"; 
+    return "efcdependent"; 
   } else {
-    if(childSupport) {
-      dependency = "efcindependentwithdependents";
-    } else {
-      dependency = "efcindependentnodependents";
-    }
+    return childSupport ? "efcindependentwithdependents" : "efcindependentnodependents";
   }
-
-  return dependency;
 }

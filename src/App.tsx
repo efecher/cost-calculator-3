@@ -62,11 +62,24 @@ export default function App(props: AppProps) {
     return;
   }
 
-  const pageSubmitHandler = () => {
+  const pageSubmitHandler = (e:React.FormEvent) => {
     
     let _cp: number = appState.currentPage + 1;
-
+    e.preventDefault();
     // TODO:  check if the next page's logic eliminates all that page's questions from view (ex: the 3 questions about test scores), if all questions on the page are set not to show based on the logic and previous-question input, auto-increment to the next page.
+    /*
+      let arrayOfQuestionVisibility = [];
+      for ( cycle through next page's questions)
+        if(typeof visibleIf !== undefined) {
+          arrayOfQuestionVisibility.push(determineVisibility(question))
+        } else {
+          // no rule defined, so we always show the question
+          arrayOfQuestionVisibility.push(true)
+        }
+      }
+
+      then if at least one question is still "visible", show the next page, if all are not visible, auto-increment to the next page. 
+    */
     setAppState({
       ...appState,
       currentPage: _cp,

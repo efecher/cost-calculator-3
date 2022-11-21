@@ -19,7 +19,13 @@ interface PageQuestion {
   stateStorageID: string,
   step?: string,
   text: string,
-  visibleIf: string
+  visibleIf?: Visibility
+}
+
+interface Visibility {
+  questionControlId: string,
+  operand: string,
+  valueToCompare: string
 }
 
 // NOTE: a placeholder for when we don't have a more specific type at the moment

@@ -2,16 +2,13 @@ export default function calculatePell(
   pellTable: number[][],
   efc: number
   ): number {
-
-  //console.log(pellTable);
-  let pell: number = 0;
   
   for(let r of pellTable) {
     if((efc >= r[0]) && (efc <= r[1])) {
-      pell = r[2];
-      break;
+      return  r[2];
     }
   }
-  //console.log(`Pell: ${pell}`);
-  return pell;
+  
+  // NOTE:  Return 0 if value not found in matrix
+  return 0;
 }

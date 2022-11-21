@@ -9,8 +9,7 @@
         "options": [],
         "stateStorageID": "form-student-age",
         "step": "1",
-        "text": "Please enter your current age.",
-        "visibleIf": "always"
+        "text": "Please enter your current age."
       },
       {
         "controlId": "planned-residence",
@@ -23,8 +22,7 @@
           "Alone/off-campus/with roommate"
         ],
         "stateStorageID": "form-planned-residence",
-        "text": "Where do you plan to reside while attending?",
-        "visibleIf": "always" 
+        "text": "Where do you plan to reside while attending?"
       },
       {
         "controlId": "current-residence",
@@ -36,8 +34,7 @@
           "Other State/Territory"
         ],
         "stateStorageID": "form-current-residence",
-        "text": "Do you currently reside in New Jersey or another state/territory?",
-        "visibleIf": "always"
+        "text": "Do you currently reside in New Jersey or another state/territory?"
       }
     ],
     [{
@@ -51,7 +48,11 @@
         ],
         "stateStorageID": "form-highschool-transfer",
         "text": "Will you be a Freshman out of High School, or a Transfer Student?",
-        "visibleIf": "{form-student-age} <= 24" 
+        "visibleIf": {
+          "questionControlId": "form-student-age",
+          "operand": "<=",
+          "valueToCompare": "24"
+        } 
       },
       {
         "controlId": "current-gpa",
@@ -63,8 +64,7 @@
         "options": [],
         "stateStorageID": "form-current-gpa",
         "step": "0.01",
-        "text": "What is your current GPA (unweighted, 4.0 scale)?",
-        "visibleIf": "always" 
+        "text": "What is your current GPA (unweighted, 4.0 scale)?" 
       }
     ],
     [
@@ -76,8 +76,7 @@
         "label": "Use Test Scores",
         "options": [],
         "stateStorageID": "form-use-test-scores",
-        "text": "Should we use the test score method to calculate? If this is unchecked, any test scores entered in the next two boxes will be ignored for calculation and the GPA/Merit method will be used. ",
-        "visibleIf": "{form-student-age} <= 24 || {form-highschool-transfer} !== \"Transfer\""
+        "text": "Should we use the test score method to calculate? If this is unchecked, any test scores entered in the next two boxes will be ignored for calculation and the GPA/Merit method will be used. "
       },
       {
         "controlId": "which-test",
@@ -86,8 +85,7 @@
         "label": "Which test to use",
         "options": ["SAT", "ACT"],
         "stateStorageID": "form-which-test",
-        "text": "Which test score to use? ",
-        "visibleIf": "{form-student-age} <= 24 || {form-highschool-transfer} !== \"Transfer\""
+        "text": "Which test score to use? "
       },
       {
         "controlId": "test-score",
@@ -99,8 +97,7 @@
         "options": [],
         "stateStorageID": "form-test-score",
         "step": "1",
-        "text": "For SAT, use your combined score (400-1600 scale), for ACT use the 1-36 scale.",
-        "visibleIf": "{form-student-age} <= 24 || {form-highschool-transfer} !== \"Transfer\""
+        "text": "For SAT, use your combined score (400-1600 scale), for ACT use the 1-36 scale."
       }
     ],
     [{
@@ -113,8 +110,7 @@
           "Yes"
         ],
         "stateStorageID": "form-marital-status",
-        "text": "Are you (the student) married?",
-        "visibleIf": "always"
+        "text": "Are you (the student) married?"
       },
       {
         "controlId": "children",
@@ -126,8 +122,7 @@
           "Yes"
         ],
         "stateStorageID": "form-children",
-        "text": "Are you (the student) the primary source of financial support for any children?",
-        "visibleIf": "always"
+        "text": "Are you (the student) the primary source of financial support for any children?"
       }
     ],
     [{
@@ -143,8 +138,7 @@
           "Six or more"
         ],
         "stateStorageID": "form-people-in-household",
-        "text": "How many people are in your family\u2018s household? (Count yourself, your parent(s), and your parent(s)\u2018 other children who are under the age of 24)",
-        "visibleIf": "always"
+        "text": "How many people are in your family\u2018s household? (Count yourself, your parent(s), and your parent(s)\u2018 other children who are under the age of 24)"
       },
       {
         "controlId": "number-in-college",
@@ -157,8 +151,7 @@
           "Three or more Children"
         ],
         "stateStorageID": "form-people-in-college",
-        "text": "Of the number in your family in the previous question, how many will be in college next year? (Count yourself and your siblings, but do not count your parents)",
-        "visibleIf": "always"
+        "text": "Of the number in your family in the previous question, how many will be in college next year? (Count yourself and your siblings, but do not count your parents)"
       },
       {
         "controlId": "household-income",
@@ -177,8 +170,7 @@
           "$100,000 or above"
         ],
         "stateStorageID": "form-household-income",
-        "text": "What is your household income? (Include income earned by yourself and parent(s). Include income from work, child support and other sources. If your parent is single, separated or divorced, include the income for the parent with whom you live. If the parent with whom you live is remarried, include both your parent\u2018s income AND his.her spouse\u2018s income.",
-        "visibleIf": "always"
+        "text": "What is your household income? (Include income earned by yourself and parent(s). Include income from work, child support and other sources. If your parent is single, separated or divorced, include the income for the parent with whom you live. If the parent with whom you live is remarried, include both your parent\u2018s income AND his.her spouse\u2018s income."
       }
     ]
   ]

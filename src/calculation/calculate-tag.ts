@@ -10,14 +10,14 @@ export default function calculateTAG(
   tagTable: number[][], 
   efc: number
   ): number {
-  let tagValue = 0;
+  
   if(stateResidency === "New Jersey") {
     for(let r of tagTable) {
       if((efc >= r[0]) && (efc <= r[1])) {
-        tagValue = r[2];
-        break;
+        return r[2];
       }
     }
   }
-  return tagValue;
+  // NOTE:  Return 0 if user is not NJ resident as TAG is only for NJ residents.
+  return 0;
 }
