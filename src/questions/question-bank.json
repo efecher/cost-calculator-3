@@ -47,12 +47,7 @@
           "Transfer"
         ],
         "stateStorageID": "form-highschool-transfer",
-        "text": "Will you be a Freshman out of High School, or a Transfer Student?",
-        "visibleIf": {
-          "questionControlId": "form-student-age",
-          "operand": "<=",
-          "valueToCompare": "24"
-        } 
+        "text": "Will you be a Freshman out of High School, or a Transfer Student?"
       },
       {
         "controlId": "current-gpa",
@@ -64,7 +59,7 @@
         "options": [],
         "stateStorageID": "form-current-gpa",
         "step": "0.01",
-        "text": "What is your current GPA (unweighted, 4.0 scale)?" 
+        "text": "What is your current GPA (unweighted, 4.0 scale)?"
       }
     ],
     [

@@ -18,15 +18,9 @@ interface PageQuestion {
   options: string[],
   stateStorageID: string,
   step?: string,
-  text: string,
-  visibleIf?: Visibility
+  text: string
 }
 
-interface Visibility {
-  questionControlId: string,
-  operand: string,
-  valueToCompare: string
-}
 
 // NOTE: a placeholder for when we don't have a more specific type at the moment
 interface LooseObject {

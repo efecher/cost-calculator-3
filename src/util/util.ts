@@ -10,24 +10,6 @@ export function prop<T, K extends keyof T>(obj: T, key: K):T[K] {
   return obj[key];
 }
 
-
-// NOTE:  given logic, determine if a certain question is shown to the user. 
-// Ex: because a user answered that their age was > 24, don't ask whether they are Freshman or Transfer, they will be treated as a Transfer. Likewise, if user is Transfer, don't show questions about test scores, Tranfers always use the GPA method
-export function determineVisibility(logic: Visibility): boolean {
-  switch(logic.operand) {
-    case "===": return logic.questionControlId === logic.valueToCompare;
-    
-    case "<=": return logic.questionControlId <= logic.valueToCompare;
-    
-    case ">=": return logic.questionControlId >= logic.valueToCompare;
-
-    default: return false;
-  } 
-}
-
-
-
-
 /* NOTE: resolveIncomeRange
 *  given the income range as a string from the value 
 *  of the radio button the user selected, resolve into a number
